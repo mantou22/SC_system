@@ -60,6 +60,7 @@ CREATE TABLE `auth_permission`  (
 -- ----------------------------
 -- Records of auth_permission
 -- ----------------------------
+
 INSERT INTO `auth_permission` VALUES (1, 'Can add log entry', 1, 'add_logentry');
 INSERT INTO `auth_permission` VALUES (2, 'Can change log entry', 1, 'change_logentry');
 INSERT INTO `auth_permission` VALUES (3, 'Can delete log entry', 1, 'delete_logentry');
