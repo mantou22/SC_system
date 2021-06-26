@@ -4,23 +4,19 @@
 """
 from django.shortcuts import render
 
-from system.models import user, role_menu,user_role,role,menu
+from system.models import user
 from django.http.response import HttpResponseRedirect, JsonResponse
 from utilslibrary.system_constant import Constant
 from django.http import HttpResponse
-from django.db.models import F,Q
+from django.db.models import Q
 from django.contrib.auth.hashers import make_password, check_password
 
-from django.core import serializers
 import json
 from utilslibrary.models.userInfo_model import UserInfo
-from utilslibrary.decorators.auth_decorators import AuthCheck
-from django.template.context_processors import request
 from system.service.user_service import UserService
 from system.service.role_service import RoleService
 
 from utilslibrary.base.base import BaseView
-from django.db.models.expressions import OrderBy
 # Create your views here.
 class Login(BaseView):
     def get(self,request):
@@ -30,7 +26,7 @@ class Login(BaseView):
     
         username=request.POST['username']
         passwd=request.POST['password']
-        user_list=user.objects.filter(loginname=username,isadmin=1);
+        user_list=user.objects.filter(loginname=username,isadmin=1)
         if user_list and user_list.__len__()>0:
             user_o=user_list[0]
             #check password

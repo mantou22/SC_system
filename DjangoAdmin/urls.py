@@ -37,7 +37,7 @@ urlpatterns = [
     url('test/', index),
     url(r'^index/$', index),
     url(r'^system/', include('system.urls')),
-
+    url(r'srv/', include('srv.urls')),
    
 
 ]

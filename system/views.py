@@ -44,5 +44,5 @@ class Index(BaseView):
         _menu_list_sub = menu.objects.filter(is_delete=0,is_show=1,type=1).exclude(parent_id=0).order_by("sort")
         
              
-        return render(request, "index.html",{"menu_list_parent":_menu_list_parent,"menu_list_sub":_menu_list_sub});    
+        return render(request, "index.html",{"menu_list_parent":_menu_list_parent,"menu_list_sub":_menu_list_sub})
     

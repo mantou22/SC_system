@@ -115,8 +115,4 @@ urlpatterns = [
     #permission error
     
     url(r'^permission_error/$', permission_error),
-    
-    
-    
-    
 ]
