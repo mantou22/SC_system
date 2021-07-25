@@ -10,5 +10,9 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url("", views.index, name='index'),
+    url("^essay/read/$", views.read),
+    url("^essay/list/$", views.essay_list),
+    url("^microCourse/list/$", views.c_list),
+    url("^microCourse/update/$", views.update),
+
 ]
