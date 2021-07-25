@@ -33,15 +33,7 @@ from system import log_view
 from system.log_view import LogList, LogForm
 from system.menu_view import MenuList,MenuView,MenuAdd,MenuEdit,MenuDel,MenuTree,\
     GetChildren,MenuIconSelect,MenuSort,GenerateSubMenu
-
-
-
-
-
 urlpatterns = [
-    
-    
-    
     #用户操作
     url(r'^login/$', Login.as_view()),
     url(r'^logout/$', Logout.as_view()),
@@ -56,9 +48,7 @@ urlpatterns = [
     #操作日志操作
     url(r'log/list/$',LogList.as_view()),
     url(r'log/form/$',LogForm.as_view()),
-    
-    
-    
+
     #脚本模板操作
     url(r'^script_template_list/$', script_template_list),
     url(r'^script_template_update/$', script_template_update),
@@ -113,6 +103,7 @@ urlpatterns = [
     url(r'^menu/generateSubMenu/$', GenerateSubMenu.as_view()),
     
     #permission error
-    
     url(r'^permission_error/$', permission_error),
+
+
 ]
