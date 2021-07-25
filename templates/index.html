@@ -285,7 +285,6 @@
                 <div class="menu">
                     <div class="menu-body">
                         <ul class="nav nav-pills nav-stacked sidenav" id="1">
-
                             {% for menu_parent in menu_list_parent %}
                                 {% if menu_parent.id in request.session.DjangoAdmin_SESSION_CURRENT_USER_PERMISSION_MENU_ID_LIST %}
                                     <li class="panel">
@@ -306,19 +305,6 @@
                                     </li>
                                 {% endif %}
                             {% endfor %}
-
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-flash"></i>&nbsp;&nbsp;Ftp Link Create</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-magic"></i>&nbsp;&nbsp;JDV Service</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-envelope"></i>&nbsp;&nbsp;Contact Us</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-legal"></i>&nbsp;&nbsp;CSV & Sales</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-umbrella"></i>&nbsp;&nbsp;Lot Create & Query</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-truck"></i>&nbsp;&nbsp;MT Form Qery</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-pinterest"></i>&nbsp;&nbsp;Conver Status Query</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-pinterest-square"></i>&nbsp;&nbsp;Writer Info. Tree</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-money"></i>&nbsp;&nbsp;Writer Tooling Bias Manager</a></li> -->
-                            <!-- <li><a class="J_menuItem" href="/form_query"><i class="fa fa fa-envelope"></i>&nbsp;&nbsp;Writer MDT Manager</a></li> -->
-
-
                         </ul>
                     </div>
                 </div>
@@ -327,8 +313,6 @@
     </div>
 </aside>
 <section id="body-container" class="animation">
-
-
     <!--选项卡  -->
     <div class="main-container" id="main-container">
         <div class="main-content">
@@ -347,7 +331,7 @@
                         <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
                         </button>
                         <a href="/system/logout/" class="roll-nav roll-right J_tabExit"><i
-                                class="fa fa fa-sign-out"></i>Exit</a>
+                                class="fa fa fa-sign-out"></i>Exit1</a>
                     </div>
                 </div>
 
@@ -362,7 +346,7 @@
     </div>
 
     <div class="footer">
-        <div class="pull-left">DjangoAdmin</a> &copy; 2019-2025</div>
+        <div class="pull-left">mantou</a> &copy; 2021</div>
     </div>
 
 </section>
