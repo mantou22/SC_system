@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="../../js/config.js"></script>
+    <script src="../../js/layui/layui.js"></script>
+    <title>数据列表</title>
+</head>
+
+<body>
+    <div class="demoTable" style="margin-left: 40px">
+        学生姓名：
+        <div class="layui-inline">
+            <input class="layui-input" id="stu_name" autocomplete="off">
+        </div>
+        <button class="layui-btn" id="search-stu">搜索</button>
+        <button class="layui-btn" id="search-stu-all">全部</button>
+    </div>
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="course">
+            新课进度
+        </button>
+        <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="practice">
+            课后/专项/真题统计
+        </button>
+        <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="total">
+            反馈汇总表
+        </button>
+        <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="real">
+            已刷真题与错题表
+        </button>
+    </script>
+
+    <script>
+        layui.use(['table', 'jquery', 'layer'], function () {
+            const table = layui.table,
+                $ = layui.$,
+                layer = layui.layer;
+            table.render({
+                elem: '#test'
+                , url: baseUrl + '/user/stu'
+                , toolbar: false
+                , page: true
+                , limit: 10
+                , cols: [[
+                    { field: 'name', title: '学生姓名', minWidth: 120 }
+                    , { title: '查看', toolbar: '#barDemo', minWidth: 300 }
+                ]]
+            });
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                let id = obj.data.id;
+                if (obj.event === 'course') {
+                    window.location.href = 'course.html#/id=' + id;
+                } else if (obj.event === 'practice') {
+                    window.location.href = 'data-chart.html#/id=' + id;
+                } else if (obj.event === 'total') {
+                    window.location.href = 'total-summary.html#/id=' + id;
+                } else if (obj.event === 'real') {
+                    window.location.href = 'real-list.html#/id=' + id;
+                }
+            });
+
+            $('#search-stu').click(function () {
+                const name = $('#stu_name').val();
+                if (name === null || name === '') {
+                    layer.msg('姓名不能为空');
+                    return;
+                }
+                table.render({
+                    elem: '#test'
+                    , url: baseUrl + '/user/stu/search?name=' + name
+                    , toolbar: false
+                    , page: true
+                    , limit: 10
+                    , cols: [[
+
+                        { field: 'name', title: '学生姓名', minWidth: 120 }
+                        , { title: '查看', toolbar: '#barDemo' }
+                    ]]
+                });
+            });
+
+            $('#search-stu-all').click(function () {
+                location.reload();
+            })
+        });
+    </script>
+</body>
+
+</html>

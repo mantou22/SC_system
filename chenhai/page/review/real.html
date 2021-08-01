@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="../../js/config.js"></script>
+    <script src="../../js/layui/layui.js"></script>
+    <title>真题反馈</title>
+</head>
+
+<body>
+
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+
+    <script type="text/html" id="barDemo">
+        {{#  if(d.is_ok == 0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="under_pass">待审核</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="pass">已通过</a>
+        {{#  } }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-warning layui-btn-xs" lay-event="detail">详情</a>
+    </script>
+
+    <script type="text/html" id="infobar">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script>
+        layui.use('table', function () {
+            var table = layui.table
+                , $ = layui.$
+                , layer = layui.layer;
+
+            table.render({
+                elem: '#test'
+                , url: baseUrl + '/real/list'
+                , toolbar: false
+                , defaultToolbar: ['filter', 'exports']
+                , page: true
+                , limit: 10
+                , cols: [[
+                     { field: 'create_time', title: '反馈时间' ,minWidth:120}
+                    ,{ field: 's', title: '每日反馈中位置',minWidth:120 }
+                    , { field: 'course_name', title: '科目' ,minWidth:120}
+                    , { field: 'teacher_name', title: '老师姓名' ,minWidth:120}
+                    , { field: 'student_name', title: '学生姓名',minWidth:120 }
+                    , { field: 'tag', title: '任务修饰', edit: 'text' ,minWidth:120}
+                    , { field: 'paper_year', title: '试卷年份',minWidth:120}
+                    , { field: 'duration', title: '完成时长(h)', edit: true ,minWidth:120}
+                    , { field: 'r', title: '是否同时梳理知识' ,minWidth:120}
+                    , { field: 'f', title: '是否完成' ,minWidth:120}
+                    , { field: 'accuracy', title: '正确率(%)', edit: true ,minWidth:120}
+                    , { field: 'comment', title: '任务详情', edit: 'text' ,minWidth:200}
+                    , { field: 'question_number', title: '错题号', edit: true ,minWidth:120}
+                    , { title: '操作', toolbar: '#barDemo', minWidth: 200 }
+                ]]
+            });
+
+            table.on('edit(info)', function (obj) {
+                const value = obj.value;//得到修改后的值
+                const qid = obj.data.qid;
+                $.ajax({
+                    url: baseUrl + '/qd/update',
+                    type: 'POST',
+                    data: {
+                        'qid': qid,
+                        'point': value
+                    },
+                    success: function (data) {
+                        layer.msg(data.msg);
+                    }
+                })
+            });
+
+            table.on('edit(test)', function (obj) {
+                let value = obj.value //得到修改后的值
+                    , data = obj.data //得到所在行所有键值
+                    , field = obj.field; //得到字段
+                $.ajax({
+                    url: baseUrl + '/real/update',
+                    type: 'POST',
+                    data: {
+                        'rid': data.rid,
+                        [field]: value
+                    },
+                    success: function (data) {
+                        layer.msg(data.msg);
+                    },
+                    error: function () {
+                        layer.msg('操作失败');
+                    }
+
+                })
+            });
+
+            table.on('tool(info)', function (obj) {
+                if (obj.event === 'del') {
+                    layer.confirm('真的要删除么', function (index) {
+                        $.ajax({
+                            url: baseUrl + '/qd/del'
+                            , data: {
+                                'id': obj.data.qid
+                            }
+                            , success: function (data) {
+                                layer.msg(data.msg);
+                            }
+                        });
+                        obj.del();
+                        layer.close(index);
+                    });
+                }
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) {
+                const data = obj.data;
+                if (obj.event === 'del') {
+                    layer.confirm('真的要删除么', function (index) {
+                        setOperate(data.rid, null, 1);
+                        obj.del();
+                        layer.close(index);
+                    });
+                } else if (obj.event === 'under_pass') {
+                    layer.confirm('真的要通过审核吗', function (index) {
+                        setOperate(data.rid, 1, 2);
+                        layer.close(index);
+                        location.reload();
+                    });
+                } else if (obj.event === 'pass') {
+                    layer.confirm('真的要取消通过审核吗', function (index) {
+                        setOperate(data.rid, 0, 2);
+                        layer.close(index);
+                        location.reload();
+                    });
+                } else if (obj.event === 'detail') {
+                    const _html = '<div style="height:500px;padding:0 10px;overflow-y:auto"><table id="info" lay-filter="info"></table></div>';
+                    layer.open({
+                        type: 1
+                        , title: '知识点列表' //不显示标题栏
+                        , closeBtn: false
+                        , area: '500px;'
+                        , shade: 0.1
+                        , id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                        , btn: ['确认']
+                        , btnAlign: 'c'
+                        , moveType: 1 //拖拽模式，0或者1
+                        , content: _html
+                    });
+                    table.render({
+                        elem: '#info',
+                        data: data.question_details,
+                        cols: [[
+                            { field: 'point', title: '知识点', minWidth: 300, edit: true },
+                            { fixed: 'right', title: '操作', toolbar: '#infobar' }
+                        ]],
+
+                    });
+                }
+            });
+
+            function setOperate(rid, is_ok, op_type) {
+                let url, type, data = {};
+                if (op_type === 1) {
+                    //删除
+                    url = baseUrl + '/real/del';
+                    data['id'] = rid;
+                    type = 'GET';
+                } else if (op_type === 2) {
+                    //更新操作
+                    url = baseUrl + '/real/update';
+                    data['rid'] = rid;
+                    data['is_ok'] = is_ok;
+                    type = 'POST';
+                }
+                $.ajax({
+                    url: url,
+                    data: data,
+                    type: type,
+                    success: function (data) {
+                        layer.msg(data.msg);
+                    }
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>

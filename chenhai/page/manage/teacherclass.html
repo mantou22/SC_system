@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>辰亥教育后台管理</title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="./css/allclass.css">
+     <link rel="stylesheet" type="text/css" href="./css/jquery-confirm.css">
+      <script src="../../js/config.js"></script>
+   <style type="text/css"> 
+   .course:hover{
+   background-color: rgb(221, 221, 221);
+   cursor:pointer;
+   }
+   .checkcourse{
+   background-color: rgb(221, 221, 221);
+   }
+    li:hover {
+    background-color: orange;
+    font-weight: bold;
+}
+li{
+text-align: center;
+vertical-align: middle;
+}
+   </style>
+  </head>
+  <body>
+   
+<div class="block" id="stuinfo">
+      <div class="list">
+        <p style="margin-left:5%">老师列表</p>
+        <ul id="stulist">
+
+        </ul>
+      </div>
+<div class="main">
+        <div class="inner" style="height: 700px;width: 100%;margin-left: 0%;">
+<div>选中课程后使用快捷键“Delete”可以删除课程！</div>
+
+    <table class='table table-striped table-bordered table-hover table-condensed'>
+      <thead>
+        <tr>
+          <th>星期日</th>
+          <th>星期一</th>
+          <th>星期二</th>
+          <th>星期三</th>
+          <th>星期四</th>
+          <th>星期五</th>
+          <th>星期六</th>
+        </tr>
+      </thead>
+
+      <tbody>
+    
+      </tbody>
+    </table>
+</div>
+</div>
+</div>
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/jquery-confirm.js"></script>
+<script>
+$(function(){
+	  //请求载入老师列表
+	    $("#stulist").html('');
+	    $.ajax({
+	     url:baseUrl+"/teacher/listbyname",
+	      dataType:'json',
+	      type:'POST',
+	      xhrFields: {withCredentials: true},
+	      success:function(data){
+	        if(data.flag == 'true'){
+	          for (var i in data.teachers){
+	            addTeaList(data.teachers[i])
+	          }
+
+	        }else{
+	          alert(data.msg)
+	        }
+	      },
+	      error:function(data){
+	        alert("网络出现问题")
+	      }
+	    });
+
+	})
+
+	function addTeaList(stu){
+	  var addin = '<li onclick="loadinfo(this)"><span>'+ stu.teacherName +'</span><input type="hidden" value="' + stu.teacherId + '"></li>';
+
+	  $("#stulist").append(addin);
+	}
+
+	function loadinfo(stu){
+	  name = $(stu).children().eq(0).html();
+	  id = $(stu).children().eq(1).val();
+	  $("div li").css("background","rgba( 245,245,245,.5)")
+	  $(stu).css("background","rgb( 211,211,211)");
+	  $("tbody").html('');
+	  getinfo(id, 0);
+	  getinfo(id, 1);
+	  getinfo(id, 2);
+	  getinfo(id, 3);
+	  
+	  
+	  $("div.course").click(function(){
+			$("div.checkcourse").removeClass("checkcourse");
+			$(this).addClass("checkcourse");
+		});
+	}
+	
+	
+	
+	
+	
+	function getinfo(id, week){
+		$.ajax({
+		    url:baseUrl+"/teacher/course/"+id+"/"+week,
+		    async:false,
+		    xhrFields: {withCredentials: true},
+		    success:function(data){
+		            addclass(data.weekCourses);
+		    },
+		    error:function(data){
+		      alert("网络出现问题");
+		    }
+		  });
+	}
+
+	function addclass(weekCourses){
+	  var empty = '<tr style="background-color: #bbb;">'+
+	  '<td>'+weekCourses[0].date+'</td>'+
+	  '<td>'+weekCourses[1].date+'</td>'+
+	  '<td>'+weekCourses[2].date+'</td>'+
+	  '<td>'+weekCourses[3].date+'</td>'+
+	  '<td>'+weekCourses[4].date+'</td>'+
+	  '<td>'+weekCourses[5].date+'</td>'+
+	  '<td>'+weekCourses[6].date+'</td>'+
+	  '</tr>';
+		  $("tbody").append(empty);
+	  var addin = '<tr>'+
+	    '<td>'+setCourseStyle(weekCourses[0].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[1].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[2].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[3].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[4].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[5].course)+'</td>'+
+	    '<td>'+setCourseStyle(weekCourses[6].course)+'</td>'+
+	  '</tr>';
+	  $("tbody").append(addin);
+	}
+	
+	function setCourseStyle(course){
+		var str = "";
+		for(var i in course){
+			var cou = "";
+			var stu = "";
+			for(var j in course[i].students){
+				stu = stu + course[i].students[j].studentName + "</br>";
+			}
+			cou = "<div id="+course[i].id+" class='course'>"+course[i].name + "</br>" + course[i].startTime.split(" ")[1] + " - " + course[i].endTime.split(" ")[1] +"</br>" + stu + course[i].description
+			+ "</br></br></div>";
+			str = str + cou;
+		}
+		return str;
+	}
+	
+	
+	  var st = 0;
+	  $(document).keydown(function(e){
+		  if (e.keyCode == 46 && st == 0){
+			  st = 1;
+			  $.confirm({
+				    title: '提示!',
+				    content: '是否删除该节课程？',
+				    confirmButton: '是',
+				    cancelButton: '否',
+				    confirm: function(){
+				    	var id = $("div.checkcourse")[0].id;
+				    	
+					    $.ajax({
+						     url:baseUrl+"/course/deleteCourse",
+						      dataType:'json',
+						      type:'POST',
+						      xhrFields: {withCredentials: true},
+						      data:{id:id},
+						      success:function(data){
+						        if(data.flag == 'true'){
+						        	$("div.checkcourse").remove();
+						        }else{
+						        	$.alert('删除失败！');
+						        }
+						      },
+						      error:function(data){
+						        alert("网络出现问题")
+						      }
+						    });
+						  st = 0;
+				    },
+				    cancel: function(){
+				    	st = 0;
+				    }
+				});
+		  }
+	  });
+
+</script>
+  </body>
+</html>

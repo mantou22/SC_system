@@ -1,0 +1,109 @@
+body{
+  margin: 0;
+  padding: 0;
+}
+img{
+  cursor:pointer;
+}
+thead{
+  background: rgb(	100,149,237);
+}
+.table table{
+  float: left;
+  margin-top: 20px;
+  min-width: 800px;
+  padding: 10px;
+}
+table thead tr th{
+  text-align: center;
+}
+table tbody tr td{
+  text-align: center;
+  vertical-align: middle!important;
+}
+table tbody tr{
+  height: 20px;
+}
+td input{
+  float: left;
+  /* margin-left: 30%; */
+  font-size: 14px;
+}
+
+td input[type='button']{
+  width: 40%;
+  font-size: 12px;
+  margin: auto;
+  margin-left: 6%;
+  min-width: 100px;
+}
+
+.block{
+  width: 100%;
+  min-width: 1024px;
+  height:100%;
+  min-height: 760px;
+  background: rgba( 245,245,245,.5);
+  float: left;
+}
+.list{
+  width: 20%;
+  height:100%;
+  max-height: 760px;
+  float: left;
+  background-color: white;
+  min-height: 760px;
+  padding-top: 10px;
+  overflow-y:scroll;
+}
+.main{
+  width: 78%;
+  height:100%;
+  float: left;
+  background-color: white;
+  min-height: 700px;
+  margin-top: 10px;
+  margin-left: 1%;
+}
+.inner{
+  width: 90%;
+  margin-left: 5%;
+  height: 325px;
+  min-height:300px;
+  margin-top: 10px;
+  background: rgba( 245,245,245,.5);
+  overflow-y: scroll;
+}
+
+div ul{
+  list-style: none;
+  width:100%;
+}
+
+div ul li{
+  list-style: none;
+  width:90%;
+  margin-left: 5%;
+  margin-top: 5px;
+  padding-top: 10px;
+}
+body ul{
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+thead{
+  background: rgb(100,149,237);
+}
+body ul li{
+  padding: 8px;
+  float: left;
+  width: 30%;
+  height:40px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 10px;
+  background-color: rgba( 245,245,245,.5);
+}
