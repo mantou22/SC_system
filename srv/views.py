@@ -1,5 +1,14 @@
 # Create your views here.
 from django.http import HttpResponse
+from django.shortcuts import render
+
+from utilslibrary.base.base import BaseView
+
+
+class Essay(BaseView):
+    @staticmethod
+    def get(request):
+        return render(request, 'srv/essay.html')
 
 
 def index(request):
