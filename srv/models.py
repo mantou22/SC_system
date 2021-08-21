@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 
-class sc_student(models.Model):
+class student(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=256, null=False, default='')
     pass_wd = models.CharField(max_length=256, null=False, default='')
@@ -23,13 +23,13 @@ class sc_student(models.Model):
         return self.username + str(self.join_time) + str(self.tel_number) + self.zh_name
 
 
-class sc_admin(models.Model):
+class stu_admin(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=256, null=False, default='')
     pass_wd = models.CharField(max_length=256, null=False, default='')
 
 
-class sc_micro_course(models.Model):
+class micro_course(models.Model):
     id = models.AutoField(primary_key=True)
     c_name = models.CharField(max_length=256, null=False, default='')
     c_path = models.CharField(max_length=256, null=False, default='')  # 微课存放路径
@@ -53,7 +53,7 @@ class stu_course(models.Model):
     process = models.CharField(max_length=256, null=True)
 
 
-class sc_model_essay(models.Model): # 模板范文
+class model_essay(models.Model): # 模板范文
     id = models.AutoField(primary_key=True)
     es_id = models.IntegerField(null=True, default=0)  # 文章类型
     title = models.CharField(max_length=256, null=True) # 文章标题
@@ -63,7 +63,7 @@ class sc_model_essay(models.Model): # 模板范文
     create_time = models.DateTimeField('date published') # 创建时间
 
 
-class sc_essay_style(models.Model): # 文章类型  （记叙、应用..）
+class essay_style(models.Model): # 文章类型  （记叙、应用..）
     id = models.AutoField(primary_key=True)
     type_name = models.CharField(max_length=256, null=True)
 
@@ -71,7 +71,7 @@ class sc_essay_style(models.Model): # 文章类型  （记叙、应用..）
         return "id:" + str(self.id) + ", type_name:" + self.type_name
 
 
-class sc_writing_task(models.Model): # 发布写作任务表
+class writing_task(models.Model): # 发布写作任务表
     id = models.AutoField(primary_key=True)  # 主键
     es_id = models.IntegerField(null=True, default=0)  # 文章类型
     title = models.CharField(max_length=256, null=True) # 文章标题
@@ -79,7 +79,7 @@ class sc_writing_task(models.Model): # 发布写作任务表
     finish_time = models.DateTimeField('date published') # 截至时间
 
 
-class sc_stu_writing(models.Model): # 学生写作
+class stu_writing(models.Model): # 学生写作
     id = models.AutoField(primary_key=True)  # 主键
     wt_id = models.IntegerField(null=True, default=0)  # 写作任务id
     s_id = models.IntegerField(null=True, default=0)  # 学生id
