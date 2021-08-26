@@ -151,51 +151,6 @@
 
             </li>
 
-            <li class="dropdown color-picker">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                    <span><i class="fa fa-circle"></i></span>
-                </a>
-                <ul class="dropdown-menu pull-right animated fadeIn" role="menu">
-                    <li class="padder-h-xs">
-                        <table class="table color-swatches-table text-center no-m-b">
-                            <tr>
-                                <td class="text-center colorr">
-                                    <a href="#" data-theme="blue" class="theme-picker">
-                                        <i class="fa fa-circle blue-base"></i>
-                                    </a>
-                                </td>
-                                <td class="text-center colorr">
-                                    <a href="#" data-theme="green" class="theme-picker">
-                                        <i class="fa fa-circle green-base"></i>
-                                    </a>
-                                </td>
-                                <td class="text-center colorr">
-                                    <a href="#" data-theme="red" class="theme-picker">
-                                        <i class="fa fa-circle red-base"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center colorr">
-                                    <a href="#" data-theme="purple" class="theme-picker">
-                                        <i class="fa fa-circle purple-base"></i>
-                                    </a>
-                                </td>
-                                <td class="text-center color">
-                                    <a href="#" data-theme="midnight-blue" class="theme-picker">
-                                        <i class="fa fa-circle midnight-blue-base"></i>
-                                    </a>
-                                </td>
-                                <td class="text-center colorr">
-                                    <a href="#" data-theme="lynch" class="theme-picker">
-                                        <i class="fa fa-circle lynch-base"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </table>
-                    </li>
-                </ul>
-            </li>
             <li>
                 <a href="#" onClick="toggleFullScreen()">
                     <span>全屏 </span>
@@ -210,14 +165,6 @@
                         class="hidden-sm">{{ request.session.DjangoAdmin_SESSION_CURRENT_USER_LOGINNAME }}</span>
                 </a>
                 <ul class="dropdown-menu animated fadeIn" role="menu">
-                    <li><a class="J_menuItem" href="/ani/a/sys/user/imageEdit">修改头像</a>
-                    </li>
-                    <li><a class="J_menuItem" href="/ani/a/sys/user/info">个人资料</a>
-                    </li>
-                    <li><a class="J_menuItem" href="/ani/a/iim/contact/index">我的通讯录</a>
-                    </li>
-                    <li><a class="J_menuItem" href="/ani/a/iim/mailBox/list">信箱</a>
-                    </li>
                     <!--
                     <li><a href="javaScript:changeStyle()">切换成横向菜单</a>
                     </li>
@@ -228,26 +175,6 @@
             </li>
         </ul>
     </div>
-    <ul class="nav navbar-nav pull-right hidd">
-        <li class="dropdown admin-dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                <img src="{% static  '/ani/userfiles/1/程序附件/sys/user/images/tim7g.jpg' %}" class="topnav-img"
-                     alt=""><span class="hidden-sm">李云龙</span>
-            </a>
-            <ul class="dropdown-menu animated fadeIn" role="menu">
-                <li><a class="J_menuItem" href="/ani/a/sys/user/imageEdit">修改头像</a>
-                </li>
-                <li><a class="J_menuItem" href="/ani/a/sys/user/info">个人资料</a>
-                </li>
-                <li><a class="J_menuItem" href="/ani/a/iim/contact/index">我的通讯录</a>
-                </li>
-                <li><a class="J_menuItem" href="/ani/a/iim/mailBox/list">信箱</a>
-                </li>
-                <li><a href="/system/logout/">安全退出</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
 </nav>
 <aside id="sidebar">
     <div class="sidenav-outer">
