@@ -53,9 +53,11 @@ class Login(BaseView):
             # query role_menu
             permission_list = []
             permission_menu_id_list = []
+            # request.session[Constant.SESSION_CURRENT_ROLE] = role.name
             _user_role_list = user_o.user_role_set.all()
             for _o_user_role in _user_role_list:
                 _o_role = _o_user_role.role
+                request.session[Constant.SESSION_CURRENT_ROLE] = _o_role.name
                 _role_menu_list = _o_role.role_menu_set.all()
                 for _o_role_menu in _role_menu_list:
                     _o_menu = _o_role_menu.menu
