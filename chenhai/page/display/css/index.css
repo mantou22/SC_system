@@ -1,0 +1,8 @@
+
+.feedback-btn>a{
+    margin: 5px 0;
+}
+.layui-table-cell {
+    height: auto;
+    white-space: normal;
+}

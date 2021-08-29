@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {#    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">#}
+    {#    <link rel="stylesheet" href="{% static 'srv/css/index.css' %}">#}
+    {#    <script src="{% static 'layui/layui.js' %}"></script>#}
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    {% include 'base.html' %}
+</head>
+<body>
+<div class="wrapper wrapper-content">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">创建范文</h3>
+        </div>
+    </div>
+</div>
+<div class="ibox-content">
+    <form class="form-horizontal  J_menuItem" enctype="multipart/form-data" action="/srv/essay/add/" method="post">
+        {% csrf_token %}
+        <div class="form-group ">
+            <label class="col-sm-2 control-label">范文标题:</label>
+            <div class="col-sm-7">
+                <input type="text" id="title" name="title" class="form-control input-s">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label">文章类型:</label>
+
+            <div class="col-sm-7">
+                <select id="writing_theme" name="writing_theme" class="form-control">
+                    <option value="1" selected="selected">应用文</option>
+                    <option value="2">记叙文</option>
+                    <option value="3">议论文</option>
+                    <option value="4">说明文</option>
+                    <option value="5">学术论文</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-2 control-label">文章内容:</label>
+
+            <div class="col-sm-7">
+                <textarea id="content" name="content" style="height: 500px;" class="form-control">
+		         </textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">提交</button>
+                <button type="reset" class="btn btn-default">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>

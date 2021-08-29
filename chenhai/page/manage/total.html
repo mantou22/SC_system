@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>辰亥教育后台管理</title>
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./css/total.css">
+    <link rel="stylesheet" type="text/css" href="./css/jquery.datetimepicker.css">
+    <script src="../../js/config.js"></script>
+    <style type="text/css">
+      .rem{
+        position: fixed;
+        bottom: 30px;
+        right: 10px;
+        background: gray;
+        padding-left: 5px;
+        padding-right: 5px;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li id="stu">学生</li>
+      <li id="tea">老师</li>
+      <li id="par">家长</li>
+      <li id="hmw">作业</li>
+    </ul>
+    <div class="block" id="stuinfo">
+      <div class="list">
+        <p style="margin-left:5%">学生列表</p>
+        <ul id="stulist">
+
+        </ul>
+      </div>
+      <div class="main">
+        <div class="inner">
+          <table class = 'table table-striped table-bordered table-hover table-condensed' >
+            <thead>
+              <tr>
+                <th>续费日期</th>
+                <th>续费金额</th>
+                <th>删除记录</th>
+              </tr>
+            </thead>
+            <tbody id="stucharge">
+
+            </tbody>
+          </table>
+        </div>
+        <div class="inner">
+          <table class = 'table table-striped table-bordered table-hover table-condensed' >
+            <thead>
+              <tr>
+                <th>课程时间</th>
+                <th>班型</th>
+                <th>课时/h</th>
+                <th>费用</th>
+                <th>教师</th>
+                <th>删除记录</th>
+              </tr>
+            </thead>
+            <tbody id="sturecord">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="foot">
+        <div class="down2"><span>开始时间:</span>
+          <input id="starttime1"/>
+        </div>
+        <div class="down2"><span>结束时间:</span>
+          <input id="endtime1"/>
+        </div>
+        <button id="search1" type="button" name="button" style="font-size:12px;margin-top:6px;margin-left:2px;float:left">确认</button>
+        <div class="down2"><span>总费用:</span>
+          <input id="rangetotaltime1" style="width:80px;"/>
+        </div>
+      </div>
+    </div>
+
+<!-- //老师 -->
+    <div class="block" style="display:none" id="teainfo">
+      <div class="list">
+        <p style="margin-left:5%">教师列表</p>
+        <ul id="tealist">
+
+        </ul>
+      </div>
+      <div class="main">
+        <div class="inner2">
+          <table class = 'table table-striped table-bordered table-hover table-condensed'>
+            <thead>
+              <tr>
+                <th>课程时间</th>
+                <th>班型</th>
+                <th>课时/h</th>
+                <th>学生姓名</th>
+                <th>备注</th>
+              </tr>
+            </thead>
+            <tbody id="tearecord">
+
+            </tbody>
+          </table>
+        </div>
+
+        <div class="foot2">
+          <div class="down"><span>类型:</span>
+            <select class="" name="" onchange="postfortype()" id="selectway">
+              <option value="1">一对一</option>
+              <option value="2">一对二</option>
+              <option value="3">一对三</option>
+              <option value="4">一对四</option>
+              <option value="5">一对五</option>
+              <option value="6">一对六</option>
+              <option value="7">一对七</option>
+              <option value="8">一对八</option>
+              <option value="9">一对九</option>
+              <option value="10">一对十</option>
+              <option value="11">一对十一</option>
+              <option value="12">一对十二</option>
+              <option value="13">一对十三</option>
+              <option value="14">一对十四</option>
+              <option value="15">一对十五</option>
+            </select>
+          </div>
+          <div class="down"><span>总时间:</span>
+            <input id="allTime"/>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="foot">
+        <div class="down2"><span>开始时间:</span>
+          <input id="starttime2"/>
+        </div>
+        <div class="down2"><span>结束时间:</span>
+          <input id="endtime2"/>
+        </div>
+        <button id="search2" type="button" name="button" style="font-size:12px;margin-top:6px;margin-left:2px;float:left">确认</button>
+        <div class="down2"><span>总课时:</span>
+          <input id="rangetotaltime2" style="width:80px;"/>
+        </div>
+      </div>
+    </div>
+
+
+<!-- //家长 -->
+    <div class="block" style="display:none" id="parinfo">
+
+      <div class="parmain">
+        <div class="inner2">
+          <table class = 'table table-striped table-bordered table-hover table-condensed'>
+            <thead>
+              <tr>
+                <th>家长</th>
+                <th>家长账号</th>
+                <th>删除</th>
+              </tr>
+            </thead>
+            <tbody id="parrecord">
+
+            </tbody>
+          </table>
+        </div>
+
+      </div> 
+    </div>
+
+<!-- //作业 -->
+    <div class="block" style="display:none" id="hmwinfo">
+      <div class="list">
+        <p style="margin-left:5%">学生列表</p>
+        <ul id="hmwstulist">
+
+        </ul>
+      </div>
+      <div class="main">
+        <div class="inner2">
+          <table class = 'table table-striped table-bordered table-hover table-condensed'>
+            <thead>
+              <tr>
+                <th>作业日期</th>
+                <th>作业题目</th>
+                <th>作业内容</th>
+                <!-- <th>作业文件路径</th> -->
+                <th>删除作业</th>
+              </tr>
+            </thead>
+            <tbody id="hmwrecord">
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>    
+
+<!--删除单个charge的modal-->
+<div class="modal fade" id="delcModal" data-id="" charge="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">确认删除此条充值记录？</h4>
+      </div>
+ <!--      <div class="modal-body">
+        
+      </div> -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="delchargebtn" class="btn btn-danger">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--删除单个record的modal-->
+<div class="modal fade" id="delrModal" data-id="" cost="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">确认删除此条上课记录？</h4>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="delrecordbtn" class="btn btn-danger">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--删除家长信息的modal-->
+<div class="modal fade" id="delparModal" parid="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">确认删除此家长信息？</h4>
+      </div>
+ <!--      <div class="modal-body">
+        
+      </div> -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="delparbtn" class="btn btn-danger">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--删除作业的modal-->
+<div class="modal fade" id="delhmwModal" hmwid="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">确认删除此作业？</h4>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="delhmwbtn" class="btn btn-danger">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </body>
+  <script src="./js/jquery.js" type="text/javascript"></script>
+  <script src="./js/total.js" type="text/javascript"></script>
+  <script src="./js/jquery.datetimepicker.full.js" type="text/javascript" ></script>
+  <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $("#starttime1").datetimepicker()
+    $("#endtime1").datetimepicker()
+    $("#starttime2").datetimepicker()
+    $("#endtime2").datetimepicker()
+  </script>
+</html>

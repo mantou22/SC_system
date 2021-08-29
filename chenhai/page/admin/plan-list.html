@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <script src="../../js/config.js"></script>
+    <script src="../../js/layui/layui.js"></script>
+    <title>教学计划列表</title>
+</head>
+<body>
+    <form class="layui-form layui-form-pane1" id="form-data">
+        <div class="layui-inline">
+            <label class="layui-form-label">学生姓名</label>
+            <div class="layui-input-block" style="min-width: 350px">
+                <select id="stu" name="id" xm-select="stu-select" xm-select-skin="primary" lay-verify="required">
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">时间范围</label>
+            <div class="layui-input-block" style="min-width: 200px">
+                <input  name="date_range" id="date_range" lay-verify="required" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="*">筛选</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+    
+    <script type="text/html" id="barDemo">
+        <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+    </script>
+
+</body>
+<style>
+.layui-table-cell {
+    height: auto;
+    white-space: normal;
+}
+</style>
+<script src="./js/plan-list.js"></script>
+</html>

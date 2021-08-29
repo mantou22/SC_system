@@ -1,0 +1,33 @@
+.header{
+    background: #393D49;
+    color: white;
+    font-size: 18px;
+    padding: 15px;
+    text-align: center;
+    
+}
+.back{
+    position: absolute;
+    left: 10px;
+    top: 15px;
+}
+
+.feedback-btn>a{
+    margin: 5px 0;
+}
+
+.add-btn {
+    display: block;
+    width: 30px;
+    height: 30px;
+}
+
+.layui-table-cell {
+    height: auto;
+    white-space: normal;
+}
+
+.layui-form-select dl {
+    max-height: 200px;
+    overflow-y: auto
+}

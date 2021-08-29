@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="../../js/config.js"></script>
+    <script src="../../js/layui/layui.js"></script>
+    <title>知识梳理</title>
+</head>
+
+<body>
+    <div class="layui-container">
+        <form class="layui-form layui-form-pane1">
+            <div class="layui-form-item">
+                <label class="layui-form-label">学生姓名</label>
+                <div class="layui-input-inline">
+                    <select id="stu" name="student_id" lay-verify="required" lay-filter="student_id" lay-search>
+                        <option value="">请搜索</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">任务修饰</label>
+                <div class="layui-input-block">
+                    <input name="tag" class="layui-input" placeholder="比如昨日">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">科目</label>
+                <div class="layui-input-block">
+                    <select id="cour" name="course_id" lay-verify="course" lay-search>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label fin_date">日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="create_time" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                        autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane>
+                <label class="layui-form-label">每日反馈中位置</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="specific_time" value="1" title="上午" checked>
+                    <input type="radio" name="specific_time" value="2" title="下午">
+                    <input type="radio" name="specific_time" value="3" title="晚上">
+                    <input type="radio" name="specific_time" value="4" title="备注">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">任务详情</label>
+                <div class="layui-input-block">
+                    <textarea lay-verify="required" placeholder="填写完成率、完成质量或知识问题与建议" class="layui-textarea"
+                        name="comment"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="*">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="./js/knownsort.js"></script>
+    <script src="./js/record-common.js"></script>
+</body>
+
+</html>
