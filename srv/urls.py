@@ -7,7 +7,7 @@
 """
 from django.conf.urls import url
 
-from srv.views import Essay, WritingTask, TaskList, EssayAdd, TaskAdd, EssayList, EssayDel, EssayEdit
+from srv.views import Essay, WritingTask, TaskList, EssayAdd, TaskAdd, EssayList, EssayDel, EssayEdit, EssayView
 from . import views
 
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     url("^essay/del/$", EssayDel.as_view()),
     url("^essay/list/$", EssayList.as_view()),
     url("^essay/edit/$", EssayEdit.as_view()),
+    url("^essay/view/$", EssayView.as_view()),
 
     url("^essay/essay_style/$", views.get_essay_style),
 

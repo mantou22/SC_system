@@ -33,7 +33,8 @@ class micro_course(models.Model):
     id = models.AutoField(primary_key=True)
     c_name = models.CharField(max_length=256, null=False, default='')
     c_path = models.CharField(max_length=256, null=False, default='')  # 微课存放路径
-    create_time = models.DateTimeField('date published')
+    #create date,example:2019-12-03
+    create_time = models.CharField(max_length=45,null=True,default="")# 创建时间
     t_id = models.IntegerField(null=True, default=0)
     c_desc = models.CharField(max_length=3000, null=True)  # 微课描述
     type = models.CharField(max_length=256, null=True)  # 微课类型
@@ -60,8 +61,11 @@ class model_essay(models.Model):  # 模板范文
     content = models.CharField(max_length=3000, null=True)  # 内容
     writing_theme = models.CharField(max_length=256, null=True)  # 写作主题
     tea_id = models.IntegerField(null=True, default=0)  # 老师id（谁发布的）
-    create_time = models.DateTimeField('date published')  # 创建时间
-
+    #create date,example:2019-12-03
+    create_time = models.CharField(max_length=45,null=True,default="")# 创建时间
+    # -------------------------------------------
+    # convert to dict,you can convert object to json use:  json.dumps(subclass_object, default=subclass_object.conver_to_dict)
+    # -------------------------------------------
     def conver_to_dict(self, obj):
         d = {}
         d.update(obj.__dict__)
@@ -81,7 +85,8 @@ class writing_task(models.Model):  # 发布写作任务表
     es_id = models.IntegerField(null=True, default=0)  # 文章类型
     title = models.CharField(max_length=256, null=True)  # 文章标题
     requirement = models.CharField(max_length=256, null=True)  # 写作要求
-    finish_time = models.DateTimeField('date published')  # 截至时间
+    #finish_time date,example:2019-12-03
+    deadline_time = models.CharField(max_length=45,null=True,default="")# 截至时间
 
 
 class stu_writing(models.Model):  # 学生写作
@@ -94,6 +99,7 @@ class stu_writing(models.Model):  # 学生写作
     tea_score = models.CharField(max_length=256, null=False)  # 老师评分
     total_score = models.CharField(max_length=256, null=False)  # 总分数
     machine_score = models.CharField(max_length=256, null=False)  # 机器评分
-    finish_time = models.DateTimeField('date published')  # 完成时间
+    #finish_time date,example:2019-12-03
+    finish_time = models.CharField(max_length=45,null=True,default="")# 完成时间
     practice_type = models.IntegerField(null=True, default=0)  # 0--正式练习需要老师评分，1--自由练习--不需要老师评分，机器评分就行。
     is_upload = models.IntegerField(null=True, default=0)  # 是否上传。

@@ -96,7 +96,7 @@
 
                     },
                     {
-                        field: 'writing_theme',
+                        field: 'wt_name',
                         title: '写作主题',
                         sortable: true
 
@@ -120,12 +120,12 @@
                         align: 'center',
                         events: {
                             'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('Message', '/srv/essay/form/?id=' + row.id, '800px', '500px');
+                                jp.openViewDialog('查看', '/srv/essay/view/?id=' + row.id, '1200px', '800px');
                                 //alert(row.id);
 
                             },
                             'click .edit': function (e, value, row, index) {
-                                jp.openSaveDialog('Edit Dictionary', '/srv/essay/edit/?id=' + row.id, '800px', '500px');
+                                jp.openSaveDialog('编辑', '/srv/essay/edit/?id=' + row.id, '1200px', '800px');
                             },
                             'click .del': function (e, value, row, index) {
                                 del(row.id);
