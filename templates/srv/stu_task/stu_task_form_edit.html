@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html style="overflow-x:auto;overflow-y:auto;">
+<head>
+    <title>Essay Manage</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="author" content="http://www.jeeplus.org/"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,IE=10"/>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <script>var d = "";</script>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    {% include 'base.html' %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+             $('.form_date').datetimepicker({
+                format: 'yyyy-mm-dd',
+                language: 'zh-CN',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0
+            });
+        });
+        function save() {
+            var isValidate = jp.validateForm('#inputForm');//校验表单
+            if (!isValidate) {
+                return false;
+            } else {
+                jp.loading();
+                jp.post("/srv/essay/task/{{method}}/", $('#inputForm').serialize(), function (data) {
+                    if (data.success) {
+                        jp.getParent().refresh();
+                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                        parent.layer.close(dialogIndex);
+                        jp.success(data.msg)
+
+                    } else {
+                        jp.error(data.msg);
+                    }
+                })
+            }
+
+        }
+    </script>
+    <meta name="decorator" content="ani"/>
+</head>
+<body id="" class="bg-white" style="">
+<form id="inputForm" class="form-horizontal  J_menuItem" action="/srv/essay/task/{{ method }}/" method="post">
+    {% csrf_token %}
+    <input id="id" name="id" type="hidden" value="{{ obj.id|default_if_none:'' }}"/>
+    <div class="form-group ">
+        <label class="col-sm-2 control-label">文章标题:</label>
+        <div class="col-sm-7">
+            <input placeholder="请输入标题" type="text" id="title" name="title" class="form-control input-s"
+                   value="{{ obj.title|default_if_none:'' }}">
+        </div>
+    </div>
+
+    <div class="form-group ">
+        <label class="col-sm-2 control-label">文章类型:</label>
+        <div class="col-sm-7">
+            <select id="writing_theme" name="writing_theme" class="form-control">
+                <option value="{{ cur_es.id }}" selected="selected">{{ cur_es.type_name|default_if_none:'' }}</option>
+                {% for es in es_list %}
+                    <option value="{{ es.id }}">{{ es.type_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="col-sm-2 control-label">写作要求:</label>
+
+        <div class="col-sm-7">
+                <textarea id="requirement" name="requirement" style="height: 500px;" class="form-control">
+                    {{ obj.requirement|default_if_none:'' }}
+		         </textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="dtp_input2" class="col-md-2 control-label">截至时间</label>
+        <div class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy"
+             data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+            <input id="deadline_time" name="deadline_time" class="form-control required" size="16" type="text" value="{{ obj.deadline_time|default_if_none:'' }}"
+                   readonly>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        <input type="hidden" id="dtp_input2" value=""/><br/>
+    </div>
+</form>
+</body>
+</html>

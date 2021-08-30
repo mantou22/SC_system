@@ -7,7 +7,9 @@
 """
 from django.conf.urls import url
 
+from srv.my_view.stu_task_view import StuTaskAdd, StuTaskDel, StuTaskEdit, StuTaskList, StuTaskView
 from srv.my_view.task_view import WritingTask, TaskAdd, TaskList, TaskDel, TaskEdit, TaskView
+from srv.my_view.video_view import VideoAdd, VideoDel, VideoEdit, VideoList, VideoView
 from srv.views import Essay, EssayAdd, EssayList, EssayDel, EssayEdit, EssayView
 from . import views
 
@@ -28,20 +30,20 @@ urlpatterns = [
     url("^essay/task/list/$", TaskList.as_view()),
     url("^essay/task/view/$", TaskView.as_view()),
 
-    # 学生写作
-    # url("^essay/task/$", WritingTask.as_view()),
-    # url("^essay/task/add/$", TaskAdd.as_view()),
-    # url("^essay/task/del/$", TaskDel.as_view()),
-    # url("^essay/task/edit/$", TaskEdit.as_view()),
-    # url("^essay/task/list/$", TaskList.as_view()),
-    # url("^essay/task/view/$", TaskView.as_view()),
-
     # 微课
-    # url("^essay/task/$", WritingTask.as_view()),
-    # url("^essay/task/add/$", TaskAdd.as_view()),
-    # url("^essay/task/del/$", TaskDel.as_view()),
-    # url("^essay/task/edit/$", TaskEdit.as_view()),
-    # url("^essay/task/list/$", TaskList.as_view()),
-    # url("^essay/task/view/$", TaskView.as_view()),
+    url("^video/add/$", VideoAdd.as_view()),
+    url("^video/del/$", VideoDel.as_view()),
+    url("^video/edit/$", VideoEdit.as_view()),
+    url("^video/list/$", VideoList.as_view()),
+    url("^video/view/$", VideoView.as_view()),
+
+    # 学生写作
+    url("^stu/task/add/$", StuTaskAdd.as_view()),
+    url("^stu/task/del/$", StuTaskDel.as_view()),
+    url("^stu/task/edit/$", StuTaskEdit.as_view()),
+    url("^stu/task/list/$", StuTaskList.as_view()),
+    url("^stu/task/view/$", StuTaskView.as_view()),
+
+
 
 ]
