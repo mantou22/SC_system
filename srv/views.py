@@ -60,7 +60,8 @@ class EssayAdd(BaseView):
             print(e)
             data["success"] = False
             data["msg"] = "Failed"
-
+        essay_style_list = essay_style.objects.all()
+        data['es_list'] = essay_style_list
         return render(request, 'srv/essay.html', data)
 
 
@@ -166,7 +167,6 @@ class EssayEdit(BaseView):
             _me.title = title
             _me.writing_theme = writing_theme
             _me.content = content
-            _s = EssayService()
             data = {}
             try:
                 _me.save()
@@ -182,25 +182,6 @@ class EssayEdit(BaseView):
             data["success"] = False
             data["msg"] = "ID Error!"
             return JsonResponse(data, safe=False)
-
-
-class WritingTask(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_form.html')
-
-
-# 写作任务
-class TaskAdd(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_form.html')
-
-
-class TaskList(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_list.html')
 
 
 def index(request):

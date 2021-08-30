@@ -38,7 +38,13 @@ class micro_course(models.Model):
     t_id = models.IntegerField(null=True, default=0)
     c_desc = models.CharField(max_length=3000, null=True)  # 微课描述
     type = models.CharField(max_length=256, null=True)  # 微课类型
-
+    # -------------------------------------------
+    # convert to dict,you can convert object to json use:  json.dumps(subclass_object, default=subclass_object.conver_to_dict)
+    # -------------------------------------------
+    def conver_to_dict(self, obj):
+        d = {}
+        d.update(obj.__dict__)
+        return d
 
 class mc_type(models.Model):
     id = models.AutoField(primary_key=True)
@@ -52,7 +58,13 @@ class stu_course(models.Model):
     s_id = models.IntegerField(null=True, default=0)
     mc_id = models.IntegerField(null=True, default=0)
     process = models.CharField(max_length=256, null=True)
-
+    # -------------------------------------------
+    # convert to dict,you can convert object to json use:  json.dumps(subclass_object, default=subclass_object.conver_to_dict)
+    # -------------------------------------------
+    def conver_to_dict(self, obj):
+        d = {}
+        d.update(obj.__dict__)
+        return d
 
 class model_essay(models.Model):  # 模板范文
     id = models.AutoField(primary_key=True)
@@ -87,7 +99,14 @@ class writing_task(models.Model):  # 发布写作任务表
     requirement = models.CharField(max_length=256, null=True)  # 写作要求
     #finish_time date,example:2019-12-03
     deadline_time = models.CharField(max_length=45,null=True,default="")# 截至时间
-
+    create_time = models.CharField(max_length=45,null=True,default="")# 截至时间
+    # -------------------------------------------
+    # convert to dict,you can convert object to json use:  json.dumps(subclass_object, default=subclass_object.conver_to_dict)
+    # -------------------------------------------
+    def conver_to_dict(self, obj):
+        d = {}
+        d.update(obj.__dict__)
+        return d
 
 class stu_writing(models.Model):  # 学生写作
     id = models.AutoField(primary_key=True)  # 主键
@@ -103,3 +122,10 @@ class stu_writing(models.Model):  # 学生写作
     finish_time = models.CharField(max_length=45,null=True,default="")# 完成时间
     practice_type = models.IntegerField(null=True, default=0)  # 0--正式练习需要老师评分，1--自由练习--不需要老师评分，机器评分就行。
     is_upload = models.IntegerField(null=True, default=0)  # 是否上传。
+    # -------------------------------------------
+    # convert to dict,you can convert object to json use:  json.dumps(subclass_object, default=subclass_object.conver_to_dict)
+    # -------------------------------------------
+    def conver_to_dict(self, obj):
+        d = {}
+        d.update(obj.__dict__)
+        return d
