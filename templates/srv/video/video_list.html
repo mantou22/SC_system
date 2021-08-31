@@ -85,10 +85,7 @@
                 onClickRow: function (row, $el) {
                 },
                 columns: [
-                    {
-                        checkbox: true
 
-                    },
                     {
                         field: 'c_name',
                         title: '视频名称',
@@ -110,11 +107,11 @@
 
                     {
                         field: 'operate',
-                        title: '查看详情',
+                        title: '观看微课',
                         align: 'center',
                         events: {
                             'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('查看', '/srv/video/view/?id=' + row.id, '1200px', '800px');
+                                jp.openViewDialog('微课', '/srv/video/view/?id=' + row.id, '1200px', '800px');
                                 //alert(row.id);
 
                             },

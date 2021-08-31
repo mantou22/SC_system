@@ -24,7 +24,7 @@ from utilslibrary.utils.date_utils import getDateStr
 class VideoView(BaseView):
     def get(self, request):
         id = request.GET.get("id")
-        print("essay model id:", id)
+        print("video id:", id)
         if not id:
             return render(request, 'srv/video/video_form_edit.html', {"method": "edit"})
         else:
@@ -152,6 +152,7 @@ def videoStream_handler(request, id):
     """将视频文件以流媒体的方式响应"""
     try:
         obj = micro_course.objects.get(id=id)
+        print({"obj": obj})
         path = obj.c_path
         # 读取视频的大小
         size = os.path.getsize(obj.c_path)
@@ -180,6 +181,7 @@ def videoStream_handler(request, id):
         resp['Accept-Ranges'] = 'bytes'
         return resp
     except:
+        print("video not found")
         return HttpResponse(status=404)
 
 
