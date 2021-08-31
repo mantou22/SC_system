@@ -5,11 +5,13 @@
 @file:micro_course_view.py
 @time:2021/8/22 17:57   
 """
+import os
 
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
+from DjangoAdmin.settings import MEDIA_ROOT
 from srv.models import micro_course
 from srv.service.video_service import VideoService
 from utilslibrary.base.base import BaseView
@@ -115,14 +117,21 @@ class VideoAdd(BaseView):
 
         c_name = request.POST.get('c_name', '')
         c_desc = request.POST.get('c_desc', '')
-        c_path = request.POST.get('c_path', '')
+        video_file = request.FILES.get("c_path", None)  # 获取上传的文件，如果没有文件，则默认为None
+        if not video_file:
+            return HttpResponse("no files for upload!")
+        c_path = os.path.join(MEDIA_ROOT, video_file.name)
+        destination = open(c_path, 'wb+')  # 打开特定的文件进行二进制的写操作
+        for chunk in video_file.chunks():  # 分块写入文件
+            destination.write(chunk)
+        destination.close()
 
         _o = micro_course()
         _o.c_name = c_name
         _o.c_desc = c_desc
         _o.c_path = c_path
         _o.create_time = getDateStr()
-        _o.type = "" # todo 微课类型后续添加
+        _o.type = ""  # todo 微课类型后续添加
 
         data = {}
         try:
