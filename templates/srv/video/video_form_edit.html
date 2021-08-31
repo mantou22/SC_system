@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% load static %}
 
+<!DOCTYPE html>
+<html style="overflow-x:auto;overflow-y:auto;">
+<head>
+    <title>Essay Manage</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="author" content="http://www.jeeplus.org/"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,IE=10"/>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <script>var d = "";</script>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    {% include 'base.html' %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+            function save() {
+                var isValidate = jp.validateForm('#inputForm');//校验表单
+                if (!isValidate) {
+                    return false;
+                } else {
+                    jp.loading();
+                    jp.post("/srv/essay/task/{{method}}/", $('#inputForm').serialize(), function (data) {
+                        if (data.success) {
+                            jp.getParent().refresh();
+                            var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                            parent.layer.close(dialogIndex);
+                            jp.success(data.msg)
+
+                        } else {
+                            jp.error(data.msg);
+                        }
+                    })
+                }
+            }
+        });
+    </script>
+    <meta name="decorator" content="ani"/>
+</head>
+<body id="" class="bg-white" style="">
+<section class="video_section">
+    <h2>{{ obj.c_name }}</h2>
+    <section class="main_section">
+        <video width="100%" controls>
+            <source src="{% url 'video_play' obj.id %}" type="video/mp4">
+        </video>
+    </section>
+</section>
 </body>
 </html>

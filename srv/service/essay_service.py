@@ -10,11 +10,12 @@
 """src/essay/ process method
 
 """
-from utilslibrary.proxy.log_db_proxy import ProxyFactory, InvocationHandler
-from django.http.response import JsonResponse
 from django.db import transaction
-from utilslibrary.base.base import BaseService
+from django.http.response import JsonResponse
+
 from srv.models import model_essay
+from utilslibrary.base.base import BaseService
+from utilslibrary.proxy.log_db_proxy import InvocationHandler, ProxyFactory
 
 
 @ProxyFactory(InvocationHandler)

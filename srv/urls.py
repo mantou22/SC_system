@@ -6,12 +6,17 @@
 @time:2021/6/13 14:55   
 """
 from django.conf.urls import url
+from django.urls import path
 
-from srv.my_view.stu_task_view import StuTaskAdd, StuTaskDel, StuTaskEdit, StuTaskList, StuTaskView
-from srv.my_view.task_view import WritingTask, TaskAdd, TaskList, TaskDel, TaskEdit, TaskView
-from srv.my_view.video_view import VideoAdd, VideoDel, VideoEdit, VideoList, VideoView
-from srv.views import Essay, EssayAdd, EssayList, EssayDel, EssayEdit, EssayView
-from . import views
+from srv.my_view import video_view
+from srv.my_view.stu_task_view import (StuTaskAdd, StuTaskDel, StuTaskEdit,
+                                       StuTaskList, StuTaskView)
+from srv.my_view.task_view import (TaskAdd, TaskDel, TaskEdit, TaskList,
+                                   TaskView, WritingTask)
+from srv.my_view.video_view import (VideoAdd, VideoDel, VideoEdit, VideoList,
+                                    VideoView)
+from srv.views import (Essay, EssayAdd, EssayDel, EssayEdit, EssayList,
+                       EssayView)
 
 urlpatterns = [
     #范文
@@ -36,6 +41,7 @@ urlpatterns = [
     url("^video/edit/$", VideoEdit.as_view()),
     url("^video/list/$", VideoList.as_view()),
     url("^video/view/$", VideoView.as_view()),
+    path("video/play/<int:id>/", video_view.videoStream_handler, name="video_play"),
 
     # 学生写作
     url("^stu/task/add/$", StuTaskAdd.as_view()),

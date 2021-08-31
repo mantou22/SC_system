@@ -9,6 +9,7 @@ Created on 2019-12-27
 """
 from django.db import models
 
+
 class BaseModel(models.Model):
     #create date,example:2019-12-03
     create_date = models.CharField(max_length=45,null=True,default="")
@@ -37,6 +38,7 @@ class BaseModel(models.Model):
     
     
 from django.views.generic import View
+
 
 class BaseView(View):
     

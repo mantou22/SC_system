@@ -1,11 +1,12 @@
-from utilslibrary.base.base import BaseView
-from django.shortcuts import render
-from django.db.models import Q
-from system.models import log
-from django.template.context_processors import request
-from django.http.response import JsonResponse, HttpResponse
-from system.models import log
 import json
+
+from django.db.models import Q
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import render
+from django.template.context_processors import request
+
+from system.models import log
+from utilslibrary.base.base import BaseView
 
 
 class LogList(BaseView):

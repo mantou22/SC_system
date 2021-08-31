@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
-from srv.models import model_essay, essay_style
+from srv.models import essay_style, model_essay
 from srv.service.essay_service import EssayService
 from utilslibrary.base.base import BaseView
 from utilslibrary.utils.date_utils import getDateStr

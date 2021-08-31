@@ -15,14 +15,13 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 
-from django.contrib import admin
-from index.views import index
-
-
-from django.conf.urls import url, include,handler400,handler404,handler500
-from system.views import page_not_found,page_error,Home,Index
-from django.views import static
 from django.conf import settings
+from django.conf.urls import handler400, handler404, handler500, include, url
+from django.contrib import admin
+from django.views import static
+
+from index.views import index
+from system.views import Home, Index, page_error, page_not_found
 
 urlpatterns = [
     url('test',index),

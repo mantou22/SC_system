@@ -2,24 +2,22 @@
 """role and auth manage
 
 """
-from django.shortcuts import render
-
-from system.models import role
-from django.http.response import HttpResponseRedirect, JsonResponse
-from utilslibrary.system_constant import Constant
-from django.http import HttpResponse
-from django.db.models import F, Q
-from django.contrib.auth.hashers import make_password, check_password
-
-from django.core import serializers
 import json
-from utilslibrary.decorators.auth_decorators import AuthCheck
+
+from django.contrib.auth.hashers import check_password, make_password
+from django.core import serializers
+from django.db.models import F, Q
+from django.http import HttpResponse
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.template.context_processors import request
+
+from system.models import menu, role, role_menu, user, user_role
 from system.service.role_service import RoleService
-from system.models import user_role, user
-from utilslibrary.models.tree_model import TreeInfo, State
-from system.models import menu, role_menu
 from utilslibrary.base.base import BaseView
+from utilslibrary.decorators.auth_decorators import AuthCheck
+from utilslibrary.models.tree_model import State, TreeInfo
+from utilslibrary.system_constant import Constant
 
 
 class RoleList(BaseView):

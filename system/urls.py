@@ -16,23 +16,29 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
-from system.user_view import Login,Logout,UserList,UserAdd,UserView,UserEdit,UserDel,\
-    UserCheckLoginName,UserSelect
-from system.dict_view import DictList,DictAdd,DictView,DictEdit,DictDel,DictValueForm,\
-    DictValueList,DictValueDel
-from system.role_view import RoleList,RoleAdd,RoleView,RoleEdit,RoleDel,RoleCheckName,\
-    RoleUserList,RoleUserOut,RolePermissionView,RolePersmissionTree,RolePersmissionSave,RoleAdd,RoleView
 
-from system.office_view import OfficeList,OfficeAdd,OfficeView,OfficeEdit,OfficeDel,\
-    OfficeTreeData,OfficeGetChildren
-from system.views import TreeSelect,Home,Index,permission_error
+from system.dict_view import (DictAdd, DictDel, DictEdit, DictList,
+                              DictValueDel, DictValueForm, DictValueList,
+                              DictView)
+from system.log_view import LogForm, LogList
+from system.menu_view import (GenerateSubMenu, GetChildren, MenuAdd, MenuDel,
+                              MenuEdit, MenuIconSelect, MenuList, MenuSort,
+                              MenuTree, MenuView)
+from system.office_view import (OfficeAdd, OfficeDel, OfficeEdit,
+                                OfficeGetChildren, OfficeList, OfficeTreeData,
+                                OfficeView)
+from system.role_view import (RoleAdd, RoleCheckName, RoleDel, RoleEdit,
+                              RoleList, RolePermissionView,
+                              RolePersmissionSave, RolePersmissionTree,
+                              RoleUserList, RoleUserOut, RoleView)
+from system.script_template_view import (script_template_list,
+                                         script_template_list_api,
+                                         script_template_update)
+from system.user_view import (Login, Logout, UserAdd, UserCheckLoginName,
+                              UserDel, UserEdit, UserList, UserSelect,
+                              UserView)
+from system.views import Home, Index, TreeSelect, permission_error
 
-from system.script_template_view import script_template_list,script_template_update,\
-    script_template_list_api
-from system import log_view
-from system.log_view import LogList, LogForm
-from system.menu_view import MenuList,MenuView,MenuAdd,MenuEdit,MenuDel,MenuTree,\
-    GetChildren,MenuIconSelect,MenuSort,GenerateSubMenu
 urlpatterns = [
     #用户操作
     url(r'^login/$', Login.as_view()),

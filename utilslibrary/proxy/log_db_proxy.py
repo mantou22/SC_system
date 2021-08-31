@@ -3,16 +3,19 @@
  
 
 """
-from django.core import serializers
-from utilslibrary.middleware.global_request_middleware import GlobalRequestMiddleware
-import sys
-
-from types import MethodType
-from utilslibrary.system_constant import Constant
 import json
-from utilslibrary.utils.date_utils import getDateStr, getMilliSecond
+import sys
+from types import MethodType
+
+from django.core import serializers
+
 from system.models import log
-from utilslibrary.utils.common_utils import getCurrentSessionName, getCurrentSessionID
+from utilslibrary.middleware.global_request_middleware import \
+    GlobalRequestMiddleware
+from utilslibrary.system_constant import Constant
+from utilslibrary.utils.common_utils import (getCurrentSessionID,
+                                             getCurrentSessionName)
+from utilslibrary.utils.date_utils import getDateStr, getMilliSecond
 
 
 # ProxyFactory  传入hcls（被装饰类的处理器类型）作为init的参数， 传入 cls（被装饰类的类型）作为call的参数

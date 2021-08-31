@@ -2,21 +2,20 @@
 """user and auth manage
 
 """
+import json
+
+from django.contrib.auth.hashers import check_password, make_password
+from django.db.models import Q
+from django.http import HttpResponse
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 from system.models import user
-from django.http.response import HttpResponseRedirect, JsonResponse
-from utilslibrary.system_constant import Constant
-from django.http import HttpResponse
-from django.db.models import Q
-from django.contrib.auth.hashers import make_password, check_password
-
-import json
-from utilslibrary.models.userInfo_model import UserInfo
-from system.service.user_service import UserService
 from system.service.role_service import RoleService
-
+from system.service.user_service import UserService
 from utilslibrary.base.base import BaseView
+from utilslibrary.models.userInfo_model import UserInfo
+from utilslibrary.system_constant import Constant
 
 
 # Create your views here.

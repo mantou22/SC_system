@@ -2,25 +2,25 @@
 """dictionary manage
 
 """
-from django.shortcuts import render
-from django.db import transaction
-from django.http.response import HttpResponseRedirect, JsonResponse
-from utilslibrary.system_constant import Constant
-from django.http import HttpResponse
-from django.db.models import F, Q
-from system.models import dict
-
+import json
 
 from django.core import serializers
-import json
+from django.db import transaction
+from django.db.models import F, Q
+from django.http import HttpResponse
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.template.context_processors import request
-from utilslibrary.utils.date_utils import getDateStr,getMilliSecond
-
-from utilslibrary.base.base import BaseView
-from system.service.dict_service import DictService
-from utilslibrary.decorators.auth_decorators import AuthCheck
 from django.utils.decorators import method_decorator
+
+from system.models import dict
+from system.service.dict_service import DictService
+from utilslibrary.base.base import BaseView
+from utilslibrary.decorators.auth_decorators import AuthCheck
 from utilslibrary.middleware.auth_check_middleware import AuthCheckMiddleWare
+from utilslibrary.system_constant import Constant
+from utilslibrary.utils.date_utils import getDateStr, getMilliSecond
+
 
 # Create your views here.
 class DictList(BaseView):

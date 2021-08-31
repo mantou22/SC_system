@@ -2,9 +2,11 @@
 """Decorators
 check login and auth        
 """
-from django.views.generic import View
-from utilslibrary.system_constant import Constant
 from django.http.response import HttpResponseRedirect
+from django.views.generic import View
+
+from utilslibrary.system_constant import Constant
+
 
 class AuthCheck(View):
     def __init__(self,func):

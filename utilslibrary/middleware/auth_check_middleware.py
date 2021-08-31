@@ -1,9 +1,10 @@
-from django.utils.deprecation import MiddlewareMixin
-from utilslibrary.system_constant import Constant
-from django.http.response import HttpResponseRedirect
 from django.conf import settings
-         
-         
+from django.http.response import HttpResponseRedirect
+from django.utils.deprecation import MiddlewareMixin
+
+from utilslibrary.system_constant import Constant
+
+
 #check auth
 class AuthCheckMiddleWare(MiddlewareMixin):
     
