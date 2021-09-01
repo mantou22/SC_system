@@ -1,11 +1,14 @@
 from django.utils.deprecation import MiddlewareMixin
+
 '''system Exception middleware
 '''
 
 import logging
 import traceback
+
 from django.http.response import JsonResponse
 from django.shortcuts import render
+
 logger = logging.getLogger('log')
 
 class BaseResp:  # 基础的返回值类

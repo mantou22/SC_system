@@ -86,7 +86,7 @@
                 },
                 columns: [
                     {
-                    checkbox: true
+                        checkbox: true
 
                     },
                     {
@@ -96,8 +96,8 @@
 
                     },
                     {
-                        field: 'writing_theme',
-                        title: '写作主题',
+                        field: 'wt_name',
+                        title: '文章类型',
                         sortable: true
 
                     },
@@ -120,12 +120,12 @@
                         align: 'center',
                         events: {
                             'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('Message', '/srv/essay/form/?id=' + row.id, '800px', '500px');
+                                jp.openViewDialog('查看', '/srv/essay/view/?id=' + row.id, '1200px', '800px');
                                 //alert(row.id);
 
                             },
                             'click .edit': function (e, value, row, index) {
-                                jp.openSaveDialog('Edit Dictionary', '/srv/essay/edit/?id=' + row.id, '800px', '500px');
+                                jp.openSaveDialog('编辑', '/srv/essay/edit/?id=' + row.id, '1200px', '800px');
                             },
                             'click .del': function (e, value, row, index) {
                                 del(row.id);
@@ -142,16 +142,26 @@
                             }
                         },
                         formatter: function operateFormatter(value, row, index) {
-                            return [
-                                '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
+                            role_name = "{{ request.session.DjangoAdmin_SESSION_CURRENT_ROLE }}";
+                            console.log("role:", role_name);
+                            if (role_name == "administrator") {
+                                return [
+                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
 
 
-                                '<a href="#" class="edit" title="Edit"><i class="fa fa-edit"></i> </a>',
+                                    '<a href="#" class="edit" title="Edit"><i class="fa fa-edit"></i> </a>',
 
 
-                                '<a href="#" class="del" title="Delete"><i class="fa fa-trash"></i> </a>'
+                                    '<a href="#" class="del" title="Delete"><i class="fa fa-trash"></i> </a>'
 
-                            ].join('');
+                                ].join('');
+                            }
+                            if (role_name == "student") {
+                                return [
+                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
+                                ].join('');
+                            }
+
                         }
                     }]
 
@@ -259,19 +269,19 @@
                     </div><!-- 搜索框结束 -->
                     <!-- 工具栏 -->
                     <div id="toolbar">
-{#                        <a id="add" class="btn btn-primary"#}
-{#                           onclick="jp.openSaveDialog('Add', '/srv/essay/add/','800px', '680px')"><i#}
-{#                                class="glyphicon glyphicon-plus"></i> Add</a>#}
+                        {#                        <a id="add" class="btn btn-primary"#}
+                        {#                           onclick="jp.openSaveDialog('Add', '/srv/essay/add/','800px', '680px')"><i#}
+                        {#                                class="glyphicon glyphicon-plus"></i> Add</a>#}
 
 
-{#                        <button id="edit" class="btn btn-success" disabled onclick="edit()">#}
-{#                            <i class="glyphicon glyphicon-edit"></i> Update#}
-{#                        </button>#}
-{##}
-{##}
-{#                        <button id="remove" class="btn btn-danger" disabled onclick="deleteAll()">#}
-{#                            <i class="glyphicon glyphicon-remove"></i> Delete#}
-{#                        </button>#}
+                        {#                        <button id="edit" class="btn btn-success" disabled onclick="edit()">#}
+                        {#                            <i class="glyphicon glyphicon-edit"></i> Update#}
+                        {#                        </button>#}
+                        {##}
+                        {##}
+                        {#                        <button id="remove" class="btn btn-danger" disabled onclick="deleteAll()">#}
+                        {#                            <i class="glyphicon glyphicon-remove"></i> Delete#}
+                        {#                        </button>#}
 
                     </div><!-- 工具栏结束 -->
 

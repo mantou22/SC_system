@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import paramiko
 
+
 def sftp_file_to(localpath,remotepath):
     t = paramiko.Transport(('172.16.20.242', 22))
     t.connect(username='root', password='QXeda@2019')

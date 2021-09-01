@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="overflow-x:auto;overflow-y:auto;">
 <head>
-    <title>User Manage</title>
+    <title>Manage</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <meta name="author" content="http://www.jeeplus.org/"/>
     <meta name="renderer" content="webkit">
@@ -22,7 +22,6 @@
             var token = $('input[name=csrfmiddlewaretoken]').val();
             //表格初始化
             $('#table').bootstrapTable({
-
                 //请求方法
                 method: 'post',
                 //类型json
@@ -53,7 +52,7 @@
                 //可供选择的每页的行数（*）
                 pageList: [10, 25, 50, 100],
                 //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
-                url: "/system/log/list/",
+                url: "/srv/essay/task/list/",
                 //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                 //queryParamsType:'',
                 ////查询参数,每次调用是会带上这个参数，可自定义
@@ -86,26 +85,8 @@
                 onClickRow: function (row, $el) {
                 },
                 columns: [
-                    //{
-                    //checkbox: true
-
-                    //},
                     {
-                        field: 'title',
-                        title: '学生',
-                        sortable: true
-
-                    },
-                    {
-                        field: 'title',
-                        title: '老师打分',
-                        sortable: true
-
-                    },
-                    {
-                        field: 'title',
-                        title: '机器打分',
-                        sortable: true
+                        checkbox: true
 
                     },
                     {
@@ -115,21 +96,20 @@
 
                     },
                     {
-                        field: 'writing_theme',
-                        title: '写作主题',
+                        field: 'wt_name',
+                        title: '文章类型',
                         sortable: true
 
                     },
 
                     {
-                        field: 'content',
-                        title: '文章内容',
-                        sortable: true
+                        field: 'requirement',
+                        title: '文章要求'
 
                     },
                     {
-                        field: 'create_time',
-                        title: '创建时间',
+                        field: 'deadline_time',
+                        title: '截至时间',
                         sortable: true
 
                     },
@@ -139,16 +119,16 @@
                         align: 'center',
                         events: {
                             'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('Message', '/system/log/form/?id=' + row.id, '800px', '500px');
+                                jp.openViewDialog('查看', '/srv/essay/task/view/?id=' + row.id, '1200px', '800px');
                                 //alert(row.id);
 
                             },
-                            /* 'click .edit': function (e, value, row, index) {
-                             jp.openSaveDialog('Edit Dictionary', '/system/user/form/?id=' + row.id,'800px', '500px');
-                             },
-                             'click .del': function (e, value, row, index) {
-                             del(row.id);
-                             }, */
+                            'click .edit': function (e, value, row, index) {
+                                jp.openSaveDialog('编辑', '/srv/essay/task/edit/?id=' + row.id, '1200px', '800px');
+                            },
+                            'click .del': function (e, value, row, index) {
+                                del(row.id);
+                            },
                             'click .setDictValue': function (e, value, row, index) {
 
                                 $("#left").attr("class", "col-sm-6");
@@ -161,11 +141,26 @@
                             }
                         },
                         formatter: function operateFormatter(value, row, index) {
-                            return [
+                            role_name = "{{ request.session.DjangoAdmin_SESSION_CURRENT_ROLE }}";
+                            console.log("role:", role_name);
+                            if (role_name == "administrator") {
+                                return [
+                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
 
-                                '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
 
-                            ].join('');
+                                    '<a href="#" class="edit" title="Edit"><i class="fa fa-edit"></i> </a>',
+
+
+                                    '<a href="#" class="del" title="Delete"><i class="fa fa-trash"></i> </a>'
+
+                                ].join('');
+                            }
+                            if (role_name == "student") {
+                                return [
+                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
+                                ].join('');
+                            }
+
                         }
                     }]
 
@@ -195,6 +190,45 @@
             $('#table').bootstrapTable('refresh');
         }
 
+        function del(ids) {
+            if (!ids) {
+                ids = getIdSelections();
+            }
+            jp.loading();
+            jp.confirm('Are you sure delete?', function () {
+                $.get("/srv/essay/task/del/?id=" + ids, function (data) {
+                    if (data.success) {
+                        $('#table').bootstrapTable('refresh');
+                        jp.success(data.msg);
+                    } else {
+                        jp.error(data.msg);
+                    }
+                })
+            })
+        }
+        function edit(id) {
+            if (!id) {
+                id = getIdSelections();
+            }
+            jp.openSaveDialog('Edit', "/srv/essay/task/edit/?id=" + id, '800px', '680px');
+
+        }
+        function deleteAll(ids) {
+            if (!ids) {
+                ids = getIdSelections();
+            }
+            jp.confirm('确认要删除选中用户吗？', function () {
+                jp.loading();
+                $.get("/srv/essay/task/del/?id=" + ids, function (data) {
+                    if (data.success) {
+                        $('#table').bootstrapTable('refresh');
+                        jp.success(data.msg);
+                    } else {
+                        jp.error(data.msg);
+                    }
+                })
+            })
+        }
 
     </script>
 
@@ -212,12 +246,12 @@
                     <!-- 搜索框-->
                     <div id="search-collapse" class="collapse">
                         <div class="accordion-inner">
-                            <form id="searchForm" class="form form-horizontal well clearfix" action="/system/user/list"
+                            <form id="searchForm" class="form form-horizontal well clearfix" action="/srv/essay/task/list"
                                   method="post">
                                 {% csrf_token %}
                                 <div class="col-xs-12 col-sm-6 col-md-4">
                                     <label class="label-item single-overflow pull-left" title="User：">文章标题：</label>
-                                    <input id="user" name="title" class=" form-control input-sm" type="text"
+                                    <input id="title" name="title" class=" form-control input-sm" type="text"
                                            value=""
                                            maxlength="50"/>
                                 </div>
@@ -232,6 +266,25 @@
                             </form>
                         </div>
                     </div><!-- 搜索框结束 -->
+                    <!-- 工具栏 -->
+                    <div id="toolbar">
+                        {#                        <a id="add" class="btn btn-primary"#}
+                        {#                           onclick="jp.openSaveDialog('Add', '/srv/essay/add/','800px', '680px')"><i#}
+                        {#                                class="glyphicon glyphicon-plus"></i> Add</a>#}
+
+
+                        {#                        <button id="edit" class="btn btn-success" disabled onclick="edit()">#}
+                        {#                            <i class="glyphicon glyphicon-edit"></i> Update#}
+                        {#                        </button>#}
+                        {##}
+                        {##}
+                        {#                        <button id="remove" class="btn btn-danger" disabled onclick="deleteAll()">#}
+                        {#                            <i class="glyphicon glyphicon-remove"></i> Delete#}
+                        {#                        </button>#}
+
+                    </div><!-- 工具栏结束 -->
+
+
                     <!-- 表格 -->
                     <table id="table"
                            data-toolbar="#toolbar">

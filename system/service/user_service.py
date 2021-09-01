@@ -2,17 +2,16 @@
 """system/user/ process method
 
 """
-from utilslibrary.proxy.log_db_proxy import ProxyFactory, InvocationHandler
-from django.http.response import HttpResponseRedirect, JsonResponse
 from django.contrib.sessions.models import Session
-from django.db.models import F, Q
 from django.db import transaction
-
+from django.db.models import F, Q
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.utils import timezone
 
-from utilslibrary.system_constant import Constant
-from utilslibrary.base.base import BaseService
 from system.models import user, user_role
+from utilslibrary.base.base import BaseService
+from utilslibrary.proxy.log_db_proxy import InvocationHandler, ProxyFactory
+from utilslibrary.system_constant import Constant
 
 
 @ProxyFactory(InvocationHandler)

@@ -2,22 +2,22 @@
 """user and auth manage
 
 """
-from django.shortcuts import render
-
-from system.models import menu
-from django.http.response import HttpResponseRedirect, JsonResponse
-from utilslibrary.system_constant import Constant
-from django.http import HttpResponse
-from django.db.models import F,Q
+import json
 
 from django.core import serializers
-import json
-from utilslibrary.decorators.auth_decorators import AuthCheck
+from django.db.models import F, Q
+from django.http import HttpResponse
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.template.context_processors import request
+
+from system.models import menu
 from system.service.menu_service import MenuService
-from utilslibrary.models.tree_model import TreeInfo,State
-from utilslibrary.models.menu_model import MenuInfo
 from utilslibrary.base.base import BaseView
+from utilslibrary.decorators.auth_decorators import AuthCheck
+from utilslibrary.models.menu_model import MenuInfo
+from utilslibrary.models.tree_model import State, TreeInfo
+from utilslibrary.system_constant import Constant
 
 
 class MenuList(BaseView):

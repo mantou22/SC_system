@@ -224,8 +224,11 @@ LOGGING = {
     }
 } 
 
-#file upload path 
-MEDIA_ROOT='/upload/'
+#file upload path server
+# MEDIA_ROOT='/upload/'
+
+#local
+MEDIA_ROOT='D:\\upload'
 
 #LOGIN_URL
 LOGIN_URL = '/system/login/'

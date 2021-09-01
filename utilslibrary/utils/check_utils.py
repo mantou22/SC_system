@@ -1,6 +1,7 @@
 
 import re
 
+
 def isnumber(s):
      print(s+' isdigit: ',s.isdigit())
      print(s+' isdecimal: ',s.isdecimal())

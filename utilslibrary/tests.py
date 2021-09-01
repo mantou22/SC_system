@@ -1,9 +1,11 @@
-from django.test import TestCase
 import re
-import xlrd
-from itertools import groupby
 from collections import Counter
+from itertools import groupby
+
+import xlrd
+from django.test import TestCase
 from tooling.service.create_folder_service import create_folder
+
 # from tooling.models import Product_Info
 # Create your tests here.
 

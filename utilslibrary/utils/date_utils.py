@@ -1,7 +1,8 @@
 
 import datetime
 import time
-  
+
+
 #example:2019-12-03 12:23:05
 def getDateStr():
     c_date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

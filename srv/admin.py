@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import student, micro_course, \
-    mc_type, stu_course, model_essay, essay_style, writing_task, stu_writing, tea_admin
+from .models import (essay_style, mc_type, micro_course, model_essay,
+                     stu_course, stu_writing, student, tea_admin, writing_task)
 
 admin.site.register(student)
 admin.site.register(tea_admin)

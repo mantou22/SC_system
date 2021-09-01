@@ -2,8 +2,8 @@
 """显示首页的操作
 
 """
-from django.shortcuts import render
 from django.http import request
+from django.shortcuts import render
 
 # Create your views here.
 

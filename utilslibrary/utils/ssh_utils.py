@@ -1,12 +1,13 @@
 
 # -*- coding: utf-8 -*-
 import os
-import paramiko
-from functools import wraps
-from datetime import datetime
 import re
- 
- 
+from datetime import datetime
+from functools import wraps
+
+import paramiko
+
+
 def timethis(func):
     """
     时间装饰器，计算函数执行所消耗的时间

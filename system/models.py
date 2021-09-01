@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.fields import CharField
 from django.template.defaultfilters import default
+
 from utilslibrary.base.base import BaseModel
 
 

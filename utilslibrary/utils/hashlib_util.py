@@ -8,6 +8,7 @@ desc:
 '''
 import hashlib
 
+
 def get_sha256(str):
     if not str or str=='':
         return ''

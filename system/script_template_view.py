@@ -2,8 +2,9 @@
 """script and file templates manage
 
 """
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
+
 
 def script_template_list(request):
     return render(request,"script_templates_list.html")

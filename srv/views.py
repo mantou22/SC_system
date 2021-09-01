@@ -3,17 +3,16 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
-from srv.models import model_essay, essay_style
+from srv.models import essay_style, model_essay
 from srv.service.essay_service import EssayService
 from utilslibrary.base.base import BaseView
 from utilslibrary.utils.date_utils import getDateStr
 
 
-
 def get_essay_style(request):
     essay_style_list = essay_style.objects.all()
     context = {
-        "es_list":essay_style_list
+        "es_list": essay_style_list
     }
     return render(request, 'srv/essay.html', context)
 
@@ -23,8 +22,8 @@ class EssayStyle(BaseView):
     def get(request):
         return render(request, 'srv/essay.html')
 
-class Essay(BaseView):
 
+class Essay(BaseView):
     @staticmethod
     def get(request):
         essay_style_list = essay_style.objects.all()
@@ -61,7 +60,8 @@ class EssayAdd(BaseView):
             print(e)
             data["success"] = False
             data["msg"] = "Failed"
-
+        essay_style_list = essay_style.objects.all()
+        data['es_list'] = essay_style_list
         return render(request, 'srv/essay.html', data)
 
 
@@ -85,6 +85,10 @@ class EssayList(BaseView):
         # 执行查询
         _model_essay_list = model_essay.objects.filter(q).order_by('-id')[self.startIndex:self.endIndex].values()
 
+        for ms in _model_essay_list:
+            wt_id = ms.get("writing_theme")
+            es = essay_style.objects.filter(id=wt_id)[0]
+            ms["wt_name"] = es.type_name
         # 组装JSON数据
         data = {}
         # 设置总记录数
@@ -93,6 +97,27 @@ class EssayList(BaseView):
         print(data)
 
         return JsonResponse(data, safe=False)
+
+
+class EssayView(BaseView):
+    def get(self, request):
+        id = request.GET.get("id")
+        print("essay model id:", id)
+        if not id:
+            return render(request, 'srv/essay_form.html', {"method": "edit"})
+        else:
+            _ms = model_essay.objects.get(id=id)
+            wt_id = _ms.writing_theme
+            essay_style_list = essay_style.objects.exclude(id=wt_id)
+            es = essay_style.objects.filter(id=wt_id)[0]
+            context = {
+                "es_list": essay_style_list,
+                "model_essay": _ms,
+                "method": "edit",
+                "cur_es": es
+            }
+
+            return render(request, 'srv/essay_form.html', context)
 
 
 # user delete
@@ -111,12 +136,21 @@ class EssayDel(BaseView):
 class EssayEdit(BaseView):
     def get(self, request):
         id = request.GET.get("id")
-        print(id)
+        print("essay model id:", id)
         if not id:
             return render(request, 'srv/essay_form.html', {"method": "edit"})
         else:
-            _o = model_essay.objects.get(id=id)
-            return render(request, 'srv/essay_form.html', {"model_essay": _o, "method": "edit"})
+            _ms = model_essay.objects.get(id=id)
+            wt_id = _ms.writing_theme
+            essay_style_list = essay_style.objects.exclude(id=wt_id)
+            es = essay_style.objects.filter(id=wt_id)[0]
+            context = {
+                "es_list": essay_style_list,
+                "model_essay": _ms,
+                "method": "edit",
+                "cur_es": es
+            }
+            return render(request, 'srv/essay_form.html', context)
 
     def post(self, request):
         data = {}
@@ -133,33 +167,21 @@ class EssayEdit(BaseView):
             _me.title = title
             _me.writing_theme = writing_theme
             _me.content = content
-            _s = EssayService()
-            return _s.upd_essay(_me)
+            data = {}
+            try:
+                _me.save()
+                data["success"] = True
+                data["msg"] = "Success"
+            except Exception as e:
+                print(e)
+                data["success"] = False
+                data["msg"] = "Failed"
+            return JsonResponse(data, safe=False)
         else:
 
             data["success"] = False
             data["msg"] = "ID Error!"
             return JsonResponse(data, safe=False)
-
-
-
-class WritingTask(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_form.html')
-
-
-# 写作任务
-class TaskAdd(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_form.html')
-
-
-class TaskList(BaseView):
-    @staticmethod
-    def get(request):
-        return render(request, 'srv/task_list.html')
 
 
 def index(request):
@@ -182,9 +204,3 @@ def update(request):
 
 def c_list(request):
     return render(request, 'srv/course/course.html')
-
-
-
-
-
-

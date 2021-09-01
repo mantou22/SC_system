@@ -1,12 +1,12 @@
-from django.shortcuts import render
-from utilslibrary.base.base import BaseView
-from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
-from utilslibrary.utils.common_utils import getCurrentSessionID
 from wsgiref.validate import check_status
-from system.models import menu
 
+from django.db.models import Q
+from django.shortcuts import render, render_to_response
+from django.views.decorators.csrf import csrf_exempt
+
+from system.models import menu
+from utilslibrary.base.base import BaseView
+from utilslibrary.utils.common_utils import getCurrentSessionID
 
 # Create your views here.
 

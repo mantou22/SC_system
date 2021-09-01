@@ -1,5 +1,6 @@
 from django.utils.deprecation import MiddlewareMixin
 
+
 class GlobalRequestMiddleware(MiddlewareMixin):
     __instance__ = None
     
