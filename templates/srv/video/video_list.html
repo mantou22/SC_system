@@ -115,9 +115,6 @@
                                 //alert(row.id);
 
                             },
-                            'click .edit': function (e, value, row, index) {
-                                jp.openSaveDialog('编辑', '/srv/video/view?id=' + row.id, '1200px', '800px');
-                            },
                             'click .del': function (e, value, row, index) {
                                 del(row.id);
                             },
@@ -138,18 +135,12 @@
                             if (role_name == "administrator") {
                                 return [
                                     '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
-
-
-                                    '<a href="#" class="edit" title="Edit"><i class="fa fa-edit"></i> </a>',
-
-
                                     '<a href="#" class="del" title="Delete"><i class="fa fa-trash"></i> </a>'
-
                                 ].join('');
                             }
                             if (role_name == "student") {
                                 return [
-                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
+                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>'
                                 ].join('');
                             }
 
