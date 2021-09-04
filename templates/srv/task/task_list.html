@@ -119,12 +119,15 @@
                         align: 'center',
                         events: {
                             'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('查看', '/srv/essay/task/view/?id=' + row.id, '1200px', '800px');
+                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
                                 //alert(row.id);
 
                             },
+                            'click .task': function (e, value, row, index) {
+                                jp.openTab('/srv/stu/task/edit/?id=' + row.id, "开始写作", true);
+                            },
                             'click .edit': function (e, value, row, index) {
-                                jp.openSaveDialog('编辑', '/srv/essay/task/edit/?id=' + row.id, '1200px', '800px');
+                                jp.openSaveDialog('写作任务', '/srv/stu/task/edit/?id=' + row.id, '1600px', '1200px');
                             },
                             'click .del': function (e, value, row, index) {
                                 del(row.id);
@@ -134,18 +137,21 @@
                                 $("#left").attr("class", "col-sm-6");
                                 setTimeout(function () {
                                     $("#right").fadeIn(500);
-                                }, 500)
-                                $("#roleLabel").html(row.name);
-                                $("#roleId").val(row.id);
-                                $("#id").val(row.id);
-                                $('#userTable').bootstrapTable("refresh", {query: {id: row.id}})
+                                }, 500);
+                                setTimeout(function () {
+                                    $("#right1").fadeIn(500);
+                                }, 500);
+                                {#                                $('#userTable').bootstrapTable("refresh", {query: {id: row.id}});#}
+                                console.log("select row.id:", row.id);
+                                {#                                $('#userFormalTable').bootstrapTable("refresh", {query: {id: row.id}});#}
+
                             },
                             'click .setDictValue': function (e, value, row, index) {
 
                                 $("#left").attr("class", "col-sm-6");
                                 setTimeout(function () {
                                     $("#right").fadeIn(500);
-                                }, 500)
+                                }, 500);
                                 $("#dictTypeLabel").html(row.type);
                                 $("#dictTypeId").val(row.id);
                                 $('#dictValueTable').bootstrapTable("refresh", {query: {dictTypeId: row.id}})
@@ -156,7 +162,6 @@
                             console.log("role:", role_name);
                             if (role_name == "administrator") {
                                 return [
-                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
                                     '<a href="#" class="edit" title="Edit"><i class="fa fa-edit"></i> </a>',
                                     '<a href="#" class="del" title="Delete"><i class="fa fa-trash"></i> </a>',
                                     '<a href="#" class="stu_detail" title="学生提交详情"><i class="fa fa-file-text-o"></i> </a>'
@@ -164,7 +169,6 @@
                             }
                             if (role_name == "student") {
                                 return [
-                                    '<a href="#" class="view" title="View" ><i class="fa fa-eye"></i> </a>',
                                     '<a href="#" class="task" title="练习" ><i class="fa fa-tasks"></i> </a>',
                                     '<a href="#" class="stu_detail" title="查看提交记录"><i class="fa fa-file-text-o"></i> </a>'
                                 ].join('');
@@ -261,66 +265,68 @@
 
                 pageList: [100],
                 //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
-                url: "/system/role/user/list/",
+                url: "/srv/stu/task/free/list/",
                 //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                 //queryParamsType:'',
                 ////查询参数,每次调用是会带上这个参数，可自定义
                 queryParams: function (params) {
                     var searchParam = $("#searchForm").serializeJSON();
+                    //alert(searchParam.pageNo)
                     searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
                     searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
                     searchParam.orderBy = params.sort === undefined ? "" : params.sort + " " + params.order;
+                    console.log("params:", params);
+                    searchParam.id = $("#password").val();
                     return searchParam;
                 },
                 //分页方式：client客户端分页，server服务端分页（*）
                 sidePagination: "server",
                 columns: [{
-                    field: 'loginname',
-                    title: 'LoginName'
-                }, {
-                    field: 'realname',
-                    title: 'RealName',
+                    field: 'create_time',
+                    title: '提交时间',
                     formatter: function (value, row, index) {
                         return '<a  href="#" onclick="jp.openViewDialog(\'查看用户\', \'/ani/a/sys/user/form?id=' + row.id + '\',\'800px\', \'680px\')">' + value + '</a>'
                     }
                 }, {
-                    field: 'office_name',
-                    title: 'OfficeName'
-
-                }, {
-                    field: 'phone',
-                    title: 'Phone'
-                }, {
-                    field: 'mobile',
-                    title: 'Mobile'
-                }, {
-                    field: 'operate',
-                    title: 'Operation',
-                    align: 'center',
-                    events: {
-                        'click .del': function (e, value, row, index) {
-
-                            jp.confirm('Are you sure you want to remove the user from the role?', function () {
-                                jp.loading();
-                                $.get('/system/role/user/out/?userId=' + row.id + '&roleId=' + $("#roleId").val(), function (data) {
-                                    if (data.success) {
-                                        $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
-                                        jp.success(data.msg);
-                                    } else {
-                                        jp.error(data.msg);
-                                    }
-                                })
-                            });
-                        }
+                    field: 'content',
+                    title: '正文'
+                },
+                    {
+                        field: 'machine_score',
+                        title: '机器评分'
                     },
-                    formatter: function operateFormatter(value, row, index) {
-                        return [
+                    {
+                        field: 'operate',
+                        title: '查看详情',
+                        align: 'center',
+                        events: {
+                            'click .del': function (e, value, row, index) {
 
-                            '<a href="#" class="del" title="移除" >[移除] </a>'
+                                jp.confirm('Are you sure you want to remove the user from the role?', function () {
+                                    jp.loading();
+                                    $.get('/system/role/user/out/?userId=' + row.id + '&roleId=' + $("#roleId").val(), function (data) {
+                                        if (data.success) {
+                                            $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
+                                            jp.success(data.msg);
+                                        } else {
+                                            jp.error(data.msg);
+                                        }
+                                    })
+                                });
+                            },
+                            'click view': function () {
+                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
+                            }
 
-                        ].join('');
-                    }
-                }]
+                        },
+                        formatter: function operateFormatter(value, row, index) {
+                            return [
+
+                                '<a href="#" class="view" title="查看详情" >[查看详情] </a>'
+
+                            ].join('');
+                        }
+                    }]
 
             });
 
@@ -349,6 +355,93 @@
                     })
                 })
             });
+
+            $('#userFormalTable').bootstrapTable({
+                //请求方法
+                method: 'post',
+                //类型json
+                dataType: "json",
+                contentType: "application/x-www-form-urlencoded",
+                //是否显示行间隔色
+                striped: true,
+                //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                cache: false,
+                //是否显示分页（*）
+                pagination: true,
+
+                pageList: [100],
+                //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
+                url: "/srv/stu/task/formal/list/",
+                //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
+                //queryParamsType:'',
+                ////查询参数,每次调用是会带上这个参数，可自定义
+                queryParams: function (params) {
+                    var searchParam = $("#searchForm").serializeJSON();
+                    //alert(searchParam.pageNo)
+                    searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
+                    searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
+                    searchParam.orderBy = params.sort === undefined ? "" : params.sort + " " + params.order;
+                    return searchParam;
+                },
+                //分页方式：client客户端分页，server服务端分页（*）
+                sidePagination: "server",
+                columns: [{
+                    field: 'create_time',
+                    title: '提交时间',
+                    formatter: function (value, row, index) {
+                        return '<a  href="#" onclick="jp.openViewDialog(\'查看用户\', \'/ani/a/sys/user/form?id=' + row.id + '\',\'800px\', \'680px\')">' + value + '</a>'
+                    }
+                }, {
+                    field: 'content',
+                    title: '正文'
+                },
+                    {
+                        field: 'machine_score',
+                        title: '机器评分'
+                    }, {
+                        field: 'tea_score',
+                        title: '老师评分'
+                    },
+                    {
+                        field: 'total_score',
+                        title: '总分'
+                    }, {
+                        field: 'operate',
+                        title: '查看详情',
+                        align: 'center',
+                        events: {
+                            'click .del': function (e, value, row, index) {
+
+                                jp.confirm('Are you sure you want to remove the user from the role?', function () {
+                                    jp.loading();
+                                    $.get('/system/role/user/out/?userId=' + row.id + '&roleId=' + $("#roleId").val(), function (data) {
+                                        if (data.success) {
+                                            $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
+                                            jp.success(data.msg);
+                                        } else {
+                                            jp.error(data.msg);
+                                        }
+                                    })
+                                });
+                            },
+                            'click view': function () {
+                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
+                            }
+                        },
+                        formatter: function operateFormatter(value, row, index) {
+                            return [
+
+                                '<a href="#" class="view" title="查看详情" >[查看详情] </a>'
+
+                            ].join('');
+                        }
+                    }]
+
+            });
+
+            if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {//如果是移动端
+                $('#userFormalTable').bootstrapTable("toggleView");
+            }
 
         });
 
@@ -398,7 +491,7 @@
                 </div>
                 <div id="right" class="panel panel-default col-sm-6" style="display:none">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><label>学生提交详情 </label><font id="roleLabel"></font><input
+                        <h3 class="panel-title"><label>自由训练提交详情 </label><font id="roleLabel"></font><input
                                 type="hidden" id="roleId"/></h3>
                     </div>
                     <div class="panel-body">
@@ -410,6 +503,22 @@
                         <!-- 表格 -->
                         <table id="userTable"
                                data-toolbar="#userToolbar"
+                               data-id-field="id">
+                        </table>
+                    </div>
+                </div>
+
+                <div id="right1" class="panel panel-default col-sm-6" style="display:none">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><label>正式提交详情 </label><font id="roleLabel"></font><input
+                                type="hidden" id="roleId"/></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="userFormalbar">
+                        </div>
+                        <!-- 表格 -->
+                        <table id="userFormalTable"
+                               data-toolbar="#userFormalbar"
                                data-id-field="id">
                         </table>
                     </div>

@@ -10,7 +10,8 @@ from django.urls import path
 
 from srv.my_view import video_view
 from srv.my_view.stu_task_view import (StuTaskAdd, StuTaskDel, StuTaskEdit,
-                                       StuTaskList, StuTaskView)
+                                       StuTaskList, StuTaskView, StuTaskSave, StuTaskFormalSave, StuTaskFormalList,
+                                       StuTaskFreeList)
 from srv.my_view.task_view import (TaskAdd, TaskDel, TaskEdit, TaskList,
                                    TaskView, WritingTask)
 from srv.my_view.video_view import (VideoAdd, VideoDel, VideoEdit, VideoList,
@@ -49,6 +50,10 @@ urlpatterns = [
     url("^stu/task/edit/$", StuTaskEdit.as_view()),
     url("^stu/task/list/$", StuTaskList.as_view()),
     url("^stu/task/view/$", StuTaskView.as_view()),
+    url("^stu/task/save/$", StuTaskSave.as_view()),
+    url("^stu/task/formal_save/$", StuTaskFormalSave.as_view()),
+    url("^stu/task/free/list/$", StuTaskFreeList.as_view()),
+    url("^stu/task/formal/list/$", StuTaskFormalList.as_view()),
 
 
 

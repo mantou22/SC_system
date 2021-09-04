@@ -22,85 +22,100 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-             $('.form_date').datetimepicker({
-                format: 'yyyy-mm-dd',
-                language: 'zh-CN',
-                weekStart: 1,
-                todayBtn: 1,
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 2,
-                minView: 2,
-                forceParse: 0
+
+
+            $("#save").click(function () {
+                jp.confirm("自由练习，非正式提交，只有机器打分,确认是否提交？", function (data) {
+                    jp.loading();
+                    jp.post("/srv/stu/task/save/", $('#inputForm').serialize(), function (data) {
+                        console.log("data", data);
+                        if (data.success) {
+                            jp.success(data.msg);
+                            jp.openTab('/srv/essay/task/list/', "查看写作任务", false);
+                        } else {
+                            jp.error(data.msg);
+                        }
+                    });
+                });
+            });
+
+            $("#formal_save").click(function () {
+                jp.confirm("确认是否提交，正式提交后无法再进行修改？", function (data) {
+                    jp.loading();
+                    jp.post("/srv/stu/task/formal_save/", $('#inputForm').serialize(), function (data) {
+                        console.log("data", data);
+                        if (data.success) {
+                            jp.success(data.msg);
+                        } else {
+                            jp.error(data.msg);
+                        }
+                    });
+                });
+
             });
         });
-        function save() {
-            var isValidate = jp.validateForm('#inputForm');//校验表单
-            if (!isValidate) {
-                return false;
-            } else {
-                jp.loading();
-                jp.post("/srv/essay/task/{{method}}/", $('#inputForm').serialize(), function (data) {
-                    if (data.success) {
-                        jp.getParent().refresh();
-                        var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-                        parent.layer.close(dialogIndex);
-                        jp.success(data.msg)
 
-                    } else {
-                        jp.error(data.msg);
-                    }
-                })
-            }
-
-        }
     </script>
     <meta name="decorator" content="ani"/>
 </head>
 <body id="" class="bg-white" style="">
-<form id="inputForm" class="form-horizontal  J_menuItem" action="/srv/essay/task/{{ method }}/" method="post">
+<form id="inputForm" class="form-horizontal  J_menuItem" action="/srv/stu/task/{{ method }}/" method="post">
     {% csrf_token %}
-    <input id="id" name="id" type="hidden" value="{{ obj.id|default_if_none:'' }}"/>
-    <div class="form-group ">
-        <label class="col-sm-2 control-label">文章标题:</label>
-        <div class="col-sm-7">
-            <input placeholder="请输入标题" type="text" id="title" name="title" class="form-control input-s"
-                   value="{{ obj.title|default_if_none:'' }}">
-        </div>
-    </div>
+    <input id="wt_id" name="wt_id" type="hidden" value="{{ wt_obj.id|default_if_none:'' }}"/>
+    <table class="table table-bordered">
+        <tbody>
+        <tr><!-- <font color="red">*</font> -->
+            <td class="active"><label class="pull-right">标题:</label></td>
+            <td><input id="title" name="title" class="form-control required" type="text" readonly
+                       value="{{ wt_obj.title|default_if_none:'' }}" maxlength="50"/></td>
+            <td class="active"><label class="pull-right">类型:</label></td>
+            <td><input id="writing_theme" name="writing_theme" type="hidden"
+                       value="{{ cur_es.id }}">
+                <input id="type_name" name="type_name" class="form-control required " type="text" readonly
+                       value="{{ cur_es.type_name|default_if_none:'' }}" maxlength="50"/></td>
+            <td class="active"><label class="pull-right">截至时间:</label></td>
+            <td><input id="mobile" name="mobile" class="form-control" type="text" readonly
+                       value="{{ wt_obj.deadline_time|default_if_none:'' }}" maxlength="100"/></td>
+        </tr>
 
-    <div class="form-group ">
-        <label class="col-sm-2 control-label">文章类型:</label>
-        <div class="col-sm-7">
-            <select id="writing_theme" name="writing_theme" class="form-control">
-                <option value="{{ cur_es.id }}" selected="selected">{{ cur_es.type_name|default_if_none:'' }}</option>
-                {% for es in es_list %}
-                    <option value="{{ es.id }}">{{ es.type_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group ">
-        <label class="col-sm-2 control-label">写作要求:</label>
+        <tr>
+            <td class="active"><label class="pull-right">写作要求:</label></td>
+            <td colspan="5"> <textarea id="remarks" name="remarks" maxlength="200" style="height: 200px;"
+                                       class="form-control" readonly
+                                       rows="3">{{ wt_obj.requirement|default_if_none:'' }}
+		         </textarea></td>
+        </tr>
 
-        <div class="col-sm-7">
-                <textarea id="requirement" name="requirement" style="height: 500px;" class="form-control">
-                    {{ obj.requirement|default_if_none:'' }}
-		         </textarea>
-        </div>
-    </div>
+        <tr>
+            <td><label class="pull-right"><font color="red">*</font>开始写作:</label></td>
+            <td colspan="5">
+                {% if not flag == 0 %}
+                    <textarea id="content" name="content" style="height: 500px;"
+                              class="form-control" disabled>{{ record.content|default_if_none:'' }}</textarea>
+                {% else %}
+                    <textarea id="content" name="content" style="height: 500px;"
+                              class="form-control">开始写作开始写作开始写作开始写作开始写作开始写作开始写作开始写作</textarea>
+                {% endif %}
+
+
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
 
     <div class="form-group">
-        <label for="dtp_input2" class="col-md-2 control-label">截至时间</label>
-        <div class="input-group date form_date col-md-5" data-date="" data-date-format="dd MM yyyy"
-             data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-            <input id="deadline_time" name="deadline_time" class="form-control required" size="16" type="text" value="{{ obj.deadline_time|default_if_none:'' }}"
-                   readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        <div class="text-center">
+            {% if not flag == 0 %}
+                <button id="save" type="button" class="btn btn-primary" disabled>自由练习提交</button>
+                <button class="btn btn-primary" id="formal_save" type="button" disabled>已提交</button>
+            {% else %}
+                <button id="save" type="button" class="btn btn-primary">自由练习提交</button>
+                <button class="btn btn-primary" id="formal_save" type="button">正式提交</button>
+            {% endif %}
         </div>
-        <input type="hidden" id="dtp_input2" value=""/><br/>
     </div>
+
 </form>
 </body>
 </html>
