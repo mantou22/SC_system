@@ -15,7 +15,7 @@ from utilslibrary.proxy.log_db_proxy import InvocationHandler, ProxyFactory
 
 @ProxyFactory(InvocationHandler)
 class StuTaskService(BaseService):
-    def add_video(self, stu_writing):
+    def add_task(self, stu_writing):
         # return msg object
         data = {}
         try:
@@ -29,10 +29,10 @@ class StuTaskService(BaseService):
 
         return JsonResponse(data, safe=False)
 
-    def que_video(self, request, micro_course):
+    def que_task(self, request, micro_course):
         print('{} que data:{}')
 
-    def upd_essay(self, stu_writing):
+    def upd_task(self, stu_writing):
         data = {}
         try:
             stu_writing.save()

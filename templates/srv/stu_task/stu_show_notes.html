@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html style="overflow-x:auto;overflow-y:auto;">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta name="author" content="http://www.jeeplus.org/"/>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=9,IE=10"/>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <script>var d = "";</script>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    {% include 'base.html' %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        });
+    </script>
+    <meta name="decorator" content="ani"/>
+</head>
+<body id="" class="bg-white" style="">
+<form id="inputForm" class="form-horizontal  J_menuItem" action="#" method="post">
+    {% csrf_token %}
+    <input id="id" name="id" type="hidden" value="{{ stu_writing.id|default_if_none:'' }}"/>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <td><label class="pull-right"><font color="red">*</font>老师评语:</label></td>
+            <td colspan="5">
+                    <textarea id="notes" name="notes" style="height: 100px;"
+                              class="form-control">{{ notes|default_if_none:'' }}</textarea>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

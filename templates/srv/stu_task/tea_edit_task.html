@@ -25,9 +25,9 @@
 
 
             $("#save").click(function () {
-                jp.confirm("自由练习，非正式提交，只有机器打分,确认是否提交？", function (data) {
+                jp.confirm("确认是否提交，提交后无法修改？", function (data) {
                     jp.loading();
-                    jp.post("/srv/stu/task/save/", $('#inputForm').serialize(), function (data) {
+                    jp.post("/srv/stu/task/tea/edit/", $('#inputForm').serialize(), function (data) {
                         console.log("data", data);
                         if (data.success) {
                             jp.success(data.msg);
@@ -59,9 +59,9 @@
     <meta name="decorator" content="ani"/>
 </head>
 <body id="" class="bg-white" style="">
-<form id="inputForm" class="form-horizontal  J_menuItem" action="/srv/stu/task/{{ method }}/" method="post">
+<form id="inputForm" class="form-horizontal  J_menuItem" action="/srv/stu/task/tea/edit/" method="post">
     {% csrf_token %}
-    <input id="wt_id" name="wt_id" type="hidden" value="{{ wt_obj.id|default_if_none:'' }}"/>
+    <input id="id" name="id" type="hidden" value="{{ stu_writing.id|default_if_none:'' }}"/>
     <table class="table table-bordered">
         <tbody>
         <tr><!-- <font color="red">*</font> -->
@@ -77,44 +77,53 @@
             <td><input id="mobile" name="mobile" class="form-control" type="text" readonly
                        value="{{ wt_obj.deadline_time|default_if_none:'' }}" maxlength="100"/></td>
         </tr>
+        <tr><!-- <font color="red">*</font> -->
+            <td class="active"><label class="pull-right">学生:</label></td>
+            <td><input id="stu" name="stu" class="form-control required" type="text" readonly
+                       value="{{ realname|default_if_none:'' }}" maxlength="50"/></td>
+            <td class="active"><label class="pull-right">机器评分:</label></td>
+            <td><input id="machine_score" name="machine_score" class="form-control required" type="text" readonly
+                       value="{{ stu_writing.machine_score|default_if_none:'' }}" maxlength="50"/></td>
+            <td class="active"><label class="pull-right">提交时间:</label></td>
+            <td><input id="time" name="time" class="form-control" type="text" readonly
+                       value="{{ stu_writing.create_time|default_if_none:'' }}" maxlength="100"/></td>
+        </tr>
 
         <tr>
             <td class="active"><label class="pull-right">写作要求:</label></td>
-            <td colspan="5"> <textarea id="remarks" name="remarks" maxlength="200" style="height: 200px;"
+            <td colspan="5"> <textarea id="remarks" name="remarks" maxlength="200" style="height: 100px;"
                                        class="form-control" readonly
                                        rows="3">{{ wt_obj.requirement|default_if_none:'' }}
 		         </textarea></td>
         </tr>
 
         <tr>
-            <td><label class="pull-right"><font color="red">*</font>开始写作:</label></td>
+            <td><label class="pull-right">学生提交内容:</label></td>
             <td colspan="5">
-                {% if not flag == 0 %}
-                    <textarea id="content" name="content" style="height: 500px;"
-                              class="form-control" disabled>{{ record.content|default_if_none:'' }}</textarea>
-                {% else %}
-                    <textarea id="content" name="content" style="height: 500px;"
-                              class="form-control"></textarea>
-                {% endif %}
-
-
+                    <textarea id="content" name="content" style="height: 300px;"
+                              class="form-control" disabled>{{ stu_writing.content|default_if_none:'' }}</textarea>
             </td>
         </tr>
-
+        <tr>
+            <td><label class="pull-right"><font color="red">*</font>老师评分:</label></td>
+            <td colspan="5">
+                <input id="tea_score" name="tea_score" class="form-control" type="text"
+                       value="{{ stu_writing.tea_score|default_if_none:'' }}" maxlength="100"/>
+            </td>
+        </tr>
+        <tr>
+            <td><label class="pull-right"><font color="red">*</font>老师评语:</label></td>
+            <td colspan="5">
+                    <textarea id="notes" name="notes" style="height: 100px;"
+                              class="form-control">{{ stu_writing.notes|default_if_none:'' }}</textarea>
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <div class="form-group">
         <div class="text-center">
-            {% if not flag == 0 %}
-                <button id="save" type="button" class="btn btn-primary" >自由练习提交</button>
-                <button class="btn btn-primary" id="formal_save" type="button" disabled>已提交</button>
-                <a href="https://xiezuocat.com/">作文纠错</a>
-            {% else %}
-                <button id="save" type="button" class="btn btn-primary">自由练习提交</button>
-                <button class="btn btn-primary" id="formal_save" type="button">正式提交</button>
-                <a href="https://xiezuocat.com/">作文纠错</a>
-            {% endif %}
+            <button id="save" type="button" class="btn btn-primary">提交</button>
         </div>
     </div>
 

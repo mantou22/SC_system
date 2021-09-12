@@ -25,6 +25,16 @@ class user(BaseModel):
     remarks = models.CharField(max_length=512, null=True)
     loginflag = models.IntegerField(default=0, null=True)
 
+    isstudent = models.IntegerField(default=0) # 0是学生，1不是学生
+    zh_name = models.CharField(max_length=256, null=True)
+    en_name = models.CharField(max_length=256, null=True)
+    gender = models.CharField(max_length=4, null=True)
+    nationality = models.CharField(max_length=256, null=True)  # 国际
+    zh_proficiency = models.CharField(max_length=256, null=True)  # 中文水平
+    college_major = models.CharField(max_length=128, null=True)  # 专业
+    stu_category = models.CharField(max_length=128, null=True)  # 教育程度/学历
+    records = models.CharField(max_length=128, null=True)  # 预留字段。
+
 
 # dictionary model
 class dict(BaseModel):

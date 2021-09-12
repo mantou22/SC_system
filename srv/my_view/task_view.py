@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 
-from srv.models import essay_style, writing_task
+from srv.models import essay_style, writing_task, stu_writing
 from srv.service.task_service import TaskService
 from utilslibrary.base.base import BaseView
 from utilslibrary.utils.date_utils import getDateStr
@@ -50,6 +50,13 @@ class TaskDel(BaseView):
     def get(self, request):
         data = {}
         ids = request.GET.get("id")
+        # 如果有学生提交了任务，无法删除
+        obj = stu_writing.objects.filter(wt_id=ids)
+        if obj:
+            data["success"] = False
+            data["msg"] = "已有学生提交了任务，无法删除原任务"
+            print("已有学生提交了任务，无法删除原任务")
+            return JsonResponse(data, safe=False)
         data["success"] = True
         data["msg"] = "Success"
         _o = writing_task()

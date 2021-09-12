@@ -17,6 +17,7 @@
     <meta name="decorator" content="ani"/>
 
     <script type="text/javascript">
+        var token = $('input[name=csrfmiddlewaretoken]').val();
         $(document).ready(function () {
 
             var token = $('input[name=csrfmiddlewaretoken]').val();
@@ -118,43 +119,33 @@
                         title: '查看详情',
                         align: 'center',
                         events: {
-                            'click .view': function (e, value, row, index) {
-                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
-                                //alert(row.id);
-
-                            },
                             'click .task': function (e, value, row, index) {
                                 jp.openTab('/srv/stu/task/edit/?id=' + row.id, "开始写作", true);
                             },
                             'click .edit': function (e, value, row, index) {
-                                jp.openSaveDialog('写作任务', '/srv/stu/task/edit/?id=' + row.id, '1600px', '1200px');
+                                jp.openSaveDialog('编辑', '/srv/essay/task/edit/?id=' + row.id, '1600px', '1200px');
                             },
                             'click .del': function (e, value, row, index) {
+                                console.log("del:", row);
                                 del(row.id);
                             },
                             'click .stu_detail': function (e, value, row, index) {
-
                                 $("#left").attr("class", "col-sm-6");
                                 setTimeout(function () {
                                     $("#right").fadeIn(500);
                                 }, 500);
-                                setTimeout(function () {
-                                    $("#right1").fadeIn(500);
-                                }, 500);
-                                {#                                $('#userTable').bootstrapTable("refresh", {query: {id: row.id}});#}
-                                console.log("select row.id:", row.id);
-                                {#                                $('#userFormalTable').bootstrapTable("refresh", {query: {id: row.id}});#}
 
+                                $('#userTable').bootstrapTable("refresh", {query: {id: row.id}});
+                                console.log("select row:", row);
                             },
-                            'click .setDictValue': function (e, value, row, index) {
-
+                            'click .show_detail': function (e, value, row, index) {
                                 $("#left").attr("class", "col-sm-6");
                                 setTimeout(function () {
-                                    $("#right").fadeIn(500);
+                                    $("#stu_right").fadeIn(500);
                                 }, 500);
-                                $("#dictTypeLabel").html(row.type);
-                                $("#dictTypeId").val(row.id);
-                                $('#dictValueTable').bootstrapTable("refresh", {query: {dictTypeId: row.id}})
+
+                                $('#stuTable').bootstrapTable("refresh", {query: {id: row.id}});
+                                console.log("select row:", row);
                             }
                         },
                         formatter: function operateFormatter(value, row, index) {
@@ -170,7 +161,7 @@
                             if (role_name == "student") {
                                 return [
                                     '<a href="#" class="task" title="练习" ><i class="fa fa-tasks"></i> </a>',
-                                    '<a href="#" class="stu_detail" title="查看提交记录"><i class="fa fa-file-text-o"></i> </a>'
+                                    '<a href="#" class="show_detail" title="查看提交记录"><i class="fa fa-file-text-o"></i> </a>'
                                 ].join('');
                             }
 
@@ -262,69 +253,117 @@
                 cache: false,
                 //是否显示分页（*）
                 pagination: true,
-
-                pageList: [100],
+                //初始化加载第一页，默认第一页
+                pageNumber: 1,
+                //每页的记录行数（*）
+                pageSize: 10,
+                //可供选择的每页的行数（*）
+                pageList: [10, 25, 50, 100],
                 //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
-                url: "/srv/stu/task/free/list/",
+                url: "/srv/stu/task/tea_view/list/",
                 //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                 //queryParamsType:'',
-                ////查询参数,每次调用是会带上这个参数，可自定义
                 queryParams: function (params) {
                     var searchParam = $("#searchForm").serializeJSON();
-                    //alert(searchParam.pageNo)
                     searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
                     searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
                     searchParam.orderBy = params.sort === undefined ? "" : params.sort + " " + params.order;
-                    console.log("params:", params);
-                    searchParam.id = $("#password").val();
+                    csrfmiddlewaretoken = token;
                     return searchParam;
+                },
+                data: {csrfmiddlewaretoken: token},
+                onShowSearch: function () {
+                    $("#search-collapse").slideToggle();
                 },
                 //分页方式：client客户端分页，server服务端分页（*）
                 sidePagination: "server",
-                columns: [{
-                    field: 'create_time',
-                    title: '提交时间',
-                    formatter: function (value, row, index) {
-                        return '<a  href="#" onclick="jp.openViewDialog(\'查看用户\', \'/ani/a/sys/user/form?id=' + row.id + '\',\'800px\', \'680px\')">' + value + '</a>'
+                contextMenuTrigger: "right",//pc端 按右键弹出菜单
+                contextMenuTriggerMobile: "press",//手机端 弹出菜单，click：单击， press：长按。
+                contextMenu: '#context-menu',
+                onContextMenuItem: function (row, $el) {
+                    if ($el.data("item") == "edit") {
+                        edit(row.id);
+                    } else if ($el.data("item") == "delete") {
+                        deleteAll(row.id);
                     }
+                },
+                columns: [{
+                    field: 'realname',
+                    title: '学生'
                 }, {
-                    field: 'content',
-                    title: '正文'
+                    field: 'stu_writing.machine_score',
+                    title: '机器评分',
+                    formatter: function (value, row, index) {
+                        if (value) {
+                            var str = Number(value);
+                            str = str.toFixed(1);
+                            return str;
+                        } else {
+                            return "";
+                        }
+                    }
                 },
                     {
-                        field: 'machine_score',
-                        title: '机器评分'
+                        field: 'stu_writing.tea_score',
+                        title: '老师评分',
+                        formatter: function (value, row, index) {
+                            if (value) {
+                                var str = Number(value);
+                                str = str.toFixed(1);
+                                return str;
+                            } else {
+                                return "";
+                            }
+                        }
+                    },
+                    {
+                        field: 'stu_writing.total_score',
+                        title: '总分',
+                        formatter: function (value, row, index) {
+                            if (value) {
+                                var str = Number(value);
+                                str = str.toFixed(1);
+                                return str;
+                            } else {
+                                return "";
+                            }
+                        }
+                    },
+                    {
+                        field: 'is_upload',
+                        title: '是否提交',
+                        formatter: function (value, row, index) {
+                            if (value === 0) {
+                                return " 未提交";
+                            } else {
+                                console.log("row", row);
+                                console.log("value", value);
+                                var res = '<a  href="#" value="">已提交</a>';
+                                return res;
+                            }
+
+                        }
                     },
                     {
                         field: 'operate',
                         title: '查看详情',
                         align: 'center',
                         events: {
-                            'click .del': function (e, value, row, index) {
-
-                                jp.confirm('Are you sure you want to remove the user from the role?', function () {
-                                    jp.loading();
-                                    $.get('/system/role/user/out/?userId=' + row.id + '&roleId=' + $("#roleId").val(), function (data) {
-                                        if (data.success) {
-                                            $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
-                                            jp.success(data.msg);
-                                        } else {
-                                            jp.error(data.msg);
-                                        }
-                                    })
-                                });
-                            },
-                            'click view': function () {
-                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
+                            'click .edit': function (e, value, row, index) {
+                                console.log("tea_task_edit:", row);
+                                jp.openTab('/srv/stu/task/tea/edit/?wt_id=' + row.stu_writing.wt_id +
+                                    "&s_id=" + row.stu_writing.s_id + "&realname=" + row.realname, "开始写作", true);
                             }
 
                         },
                         formatter: function operateFormatter(value, row, index) {
-                            return [
-
-                                '<a href="#" class="view" title="查看详情" >[查看详情] </a>'
-
-                            ].join('');
+                            if (row.is_upload === 0) {
+                                return " 无";
+                            } else {
+                                return [
+                                    '<a href="#" class="edit" title="Edit" >[查看详情]</i> </a>',
+                                ].join('');
+                            }
                         }
                     }]
 
@@ -334,29 +373,11 @@
                 $('#userTable').bootstrapTable("toggleView");
             }
 
-            $("#assignButton").click(function () {
-                jp.openUserSelectDialog(true, function (ids) {
 
-                    jp.loading();
-                    var token = $('input[name=csrfmiddlewaretoken]').val();
+        });
 
-                    $.post("/system/user/select/", {
-                        id: $("#roleId").val(),
-                        ids: ids,
-                        csrfmiddlewaretoken: token
-                    }, function (data) {
-                        //alert(data.success);
-                        if (data.success) {
-                            $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
-                            jp.success(data.msg);
-                        } else {
-                            jp.error(data.msg);
-                        }
-                    })
-                })
-            });
-
-            $('#userFormalTable').bootstrapTable({
+        $(document).ready(function () {
+            $('#stuTable').bootstrapTable({
                 //请求方法
                 method: 'post',
                 //类型json
@@ -368,81 +389,116 @@
                 cache: false,
                 //是否显示分页（*）
                 pagination: true,
-
-                pageList: [100],
+                //初始化加载第一页，默认第一页
+                pageNumber: 1,
+                //每页的记录行数（*）
+                pageSize: 10,
+                //可供选择的每页的行数（*）
+                pageList: [10, 25, 50, 100],
                 //这个接口需要处理bootstrap table传递的固定参数,并返回特定格式的json数据
-                url: "/srv/stu/task/formal/list/",
+                url: "/srv/stu/task/stu_view/list/",
                 //默认值为 'limit',传给服务端的参数为：limit, offset, search, sort, order Else
                 //queryParamsType:'',
-                ////查询参数,每次调用是会带上这个参数，可自定义
                 queryParams: function (params) {
                     var searchParam = $("#searchForm").serializeJSON();
-                    //alert(searchParam.pageNo)
                     searchParam.pageNo = params.limit === undefined ? "1" : params.offset / params.limit + 1;
                     searchParam.pageSize = params.limit === undefined ? -1 : params.limit;
                     searchParam.orderBy = params.sort === undefined ? "" : params.sort + " " + params.order;
+                    csrfmiddlewaretoken = token;
                     return searchParam;
+                },
+                data: {csrfmiddlewaretoken: token},
+                onShowSearch: function () {
+                    $("#search-collapse").slideToggle();
                 },
                 //分页方式：client客户端分页，server服务端分页（*）
                 sidePagination: "server",
+                contextMenuTrigger: "right",//pc端 按右键弹出菜单
+                contextMenuTriggerMobile: "press",//手机端 弹出菜单，click：单击， press：长按。
+                contextMenu: '#context-menu',
+                onContextMenuItem: function (row, $el) {
+                    if ($el.data("item") == "edit") {
+                        edit(row.id);
+                    } else if ($el.data("item") == "delete") {
+                        deleteAll(row.id);
+                    }
+                },
                 columns: [{
-                    field: 'create_time',
-                    title: '提交时间',
+                    field: 'is_upload',
+                    title: '练习类型',
                     formatter: function (value, row, index) {
-                        return '<a  href="#" onclick="jp.openViewDialog(\'查看用户\', \'/ani/a/sys/user/form?id=' + row.id + '\',\'800px\', \'680px\')">' + value + '</a>'
+                        console.log("stu,row",row);
+                        if (value === 1) {
+                            return '<font style="color:blue">正式练习</font>';
+                        } else {
+                            return '<font >自由练习</font>';
+                        }
                     }
                 }, {
-                    field: 'content',
-                    title: '正文'
+                    field: 'machine_score',
+                    title: '机器评分',
+                    formatter: function (value, row, index) {
+                        if (value) {
+                            var str = Number(value);
+                            str = str.toFixed(1);
+                            return str;
+                        } else {
+                            return "";
+                        }
+                    }
                 },
                     {
-                        field: 'machine_score',
-                        title: '机器评分'
-                    }, {
                         field: 'tea_score',
-                        title: '老师评分'
+                        title: '老师评分',
+                        formatter: function (value, row, index) {
+                            if (value) {
+                                var str = Number(value);
+                                str = str.toFixed(1);
+                                return str;
+                            } else {
+                                return "";
+                            }
+                        }
                     },
                     {
                         field: 'total_score',
-                        title: '总分'
-                    }, {
+                        title: '总分',
+                        formatter: function (value, row, index) {
+                            if (value) {
+                                var str = Number(value);
+                                str = str.toFixed(1);
+                                return str;
+                            } else {
+                                return "";
+                            }
+                        }
+                    },
+                    {
+                        field: 'create_time',
+                        title: '提交时间'
+
+                    },
+                    {
                         field: 'operate',
                         title: '查看详情',
                         align: 'center',
                         events: {
-                            'click .del': function (e, value, row, index) {
-
-                                jp.confirm('Are you sure you want to remove the user from the role?', function () {
-                                    jp.loading();
-                                    $.get('/system/role/user/out/?userId=' + row.id + '&roleId=' + $("#roleId").val(), function (data) {
-                                        if (data.success) {
-                                            $('#userTable').bootstrapTable("refresh", {query: {id: $("#roleId").val()}});
-                                            jp.success(data.msg);
-                                        } else {
-                                            jp.error(data.msg);
-                                        }
-                                    })
-                                });
-                            },
-                            'click view': function () {
-                                jp.openViewDialog('查看', '/srv/stu/task/view/?id=' + row.id, '1200px', '800px');
+                            'click .edit': function (e, value, row, index) {
+                                console.log("tea_task_edit:", row);
+                                jp.openViewDialog('查看', '/srv/stu/task/show_notes/?notes=' + row.notes, '1200px', '800px');
                             }
                         },
                         formatter: function operateFormatter(value, row, index) {
-                            return [
-
-                                '<a href="#" class="view" title="查看详情" >[查看详情] </a>'
-
-                            ].join('');
+                            if (row.is_upload === 0) {
+                                return " 无";
+                            } else {
+                                return [
+                                    '<a href="#" class="edit" title="Edit" >[查看详情]</i> </a>',
+                                ].join('');
+                            }
                         }
                     }]
-
             });
-
-            if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {//如果是移动端
-                $('#userFormalTable').bootstrapTable("toggleView");
-            }
-
         });
 
 
@@ -491,16 +547,13 @@
                 </div>
                 <div id="right" class="panel panel-default col-sm-6" style="display:none">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><label>自由训练提交详情 </label><font id="roleLabel"></font><input
+                        <h3 class="panel-title"><label>提交详情 </label><font id="roleLabel"></font><input
                                 type="hidden" id="roleId"/></h3>
                     </div>
                     <div class="panel-body">
                         <div id="userToolbar">
-                            <button id="assignButton" class="btn btn-outline btn-primary" title="Add User"><i
-                                    class="fa fa-file-text"></i> 查看详情
-                            </button>
                         </div>
-                        <!-- 表格 -->
+                        <!-- 老师使用的表格 -->
                         <table id="userTable"
                                data-toolbar="#userToolbar"
                                data-id-field="id">
@@ -508,17 +561,17 @@
                     </div>
                 </div>
 
-                <div id="right1" class="panel panel-default col-sm-6" style="display:none">
+                <div id="stu_right" class="panel panel-default col-sm-6" style="display:none">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><label>正式提交详情 </label><font id="roleLabel"></font><input
+                        <h3 class="panel-title"><label>提交详情 </label><font id="roleLabel"></font><input
                                 type="hidden" id="roleId"/></h3>
                     </div>
                     <div class="panel-body">
-                        <div id="userFormalbar">
+                        <div id="userToolbar">
                         </div>
-                        <!-- 表格 -->
-                        <table id="userFormalTable"
-                               data-toolbar="#userFormalbar"
+                        <!-- 学生使用的表格 -->
+                        <table id="stuTable"
+                               data-toolbar="#stuToolbar"
                                data-id-field="id">
                         </table>
                     </div>

@@ -207,7 +207,10 @@ class UserEdit(BaseView):
         parent_name = request.POST.get('parent_name', '')
         remarks = request.POST.get('remarks')
         addr = request.POST.get('addr')
-
+        nationality = request.POST.get('nationality', '')
+        zh_proficiency = request.POST.get('zh_proficiency', '')
+        college_major = request.POST.get('college_major', '')
+        stu_category = request.POST.get('stu_category')
         if loginname == '' or realname == '' or passwd == '':
             data["success"] = False
             data["msg"] = "Input Data Error!"
@@ -226,6 +229,10 @@ class UserEdit(BaseView):
             _o.office_id = parent_id
             _o.office_name = parent_name
             _o.remarks = remarks
+            _o.nationality = nationality
+            _o.zh_proficiency = zh_proficiency
+            _o.college_major = college_major
+            _o.stu_category = stu_category
             _o.addr = addr
 
             _s = UserService()
